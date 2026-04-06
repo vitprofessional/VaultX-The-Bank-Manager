@@ -53,16 +53,12 @@ class CalculasController extends Controller
     
     public function bankEmployee(){
         if(Session::has('superAdmin')):
-            $employeeType = 1;
             $employeeId = BankEmployee::find(Session::get('superAdmin'))->id;
         elseif(Session::has('generalAdmin')):
-            $employeeType = 2;
             $employeeId = BankEmployee::find(Session::get('generalAdmin'))->id;
         elseif(Session::has('manager')):
-            $employeeType = 3;
             $employeeId = BankEmployee::find(Session::get('manager'))->id;
         else:
-            $employeeType = 4;
             $employeeId = BankEmployee::find(Session::get('cashier'))->id;
         endif;
 
@@ -114,7 +110,7 @@ class CalculasController extends Controller
             return back()->with('error','New password not match confirm password');
         endif;
         $chk = BankEmployee::find($requ->employeeId);
-        if(!empty($chk) && $chk->count()>0):
+        if(!empty($chk)):
             $hashPass   = $chk->password;
             if(Hash::check($requ->loginPass,$hashPass)):
                 $newHashPass = Hash::make($requ->newPass);
@@ -135,7 +131,7 @@ class CalculasController extends Controller
 
     public function updateEmployeeProfile(Request $requ){
         $chk = BankEmployee::find($requ->employeeId);
-        if(!empty($chk) && $chk->count()>0):
+        if(!empty($chk)):
             $chk->name      = $requ->employeeName;
             $chk->email     = $requ->employeeMail;
             $chk->mobile    = $requ->employeeMobile;

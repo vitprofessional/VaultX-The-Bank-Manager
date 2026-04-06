@@ -170,7 +170,7 @@ Route::middleware(['superAdmin','manager','generalAdmin'])->group(function(){
     ])->name('delEmployee');
 
     // server configuration routes
-    Route::get('/server/configuratoin/',[
+    Route::get('/server/configuration/',[
         ServerConfiguration::class,
         'serverConfig'
     ])->name('serverConfig');
@@ -190,22 +190,22 @@ Route::middleware(['superAdmin','manager','generalAdmin'])->group(function(){
         'delThirdLogo'
     ])->name('delThirdLogo');
 
-    Route::post('/server/configuratoin/save',[
+    Route::post('/server/configuration/save',[
         ServerConfiguration::class,
         'saveServerConfig'
     ])->name('saveServerConfig');
 
-    Route::post('/server/configuratoin/bankLogo/update',[
+    Route::post('/server/configuration/bankLogo/update',[
         ServerConfiguration::class,
         'saveBankLogo'
     ])->name('saveBankLogo');
 
-    Route::post('/server/configuratoin/secondLogo/update',[
+    Route::post('/server/configuration/secondLogo/update',[
         ServerConfiguration::class,
         'saveSecondLogo'
     ])->name('saveSecondLogo');
 
-    Route::post('/server/configuratoin/thirdLogo/update',[
+    Route::post('/server/configuration/thirdLogo/update',[
         ServerConfiguration::class,
         'saveThirdLogo'
     ])->name('saveThirdLogo');

@@ -1,6 +1,15 @@
 @extends('adminPanel.include')
 @section('calculasTitle') Employee Profile @endsection
 @section('calculasBody')
+
+<div class="page-header">
+    <div>
+        <div class="page-kicker">Employee Management</div>
+        <h1 class="page-title">Employee Profile</h1>
+        <p class="page-copy">Create and manage employee access with role-based permissions.</p>
+    </div>
+</div>
+
 <div class="row align-items-center v-100">
     <div class="col-10 col-md-6 mx-auto my-4">
         <div class="card">
@@ -9,12 +18,12 @@
                 <div class="row">
                     <div class="col-12">
                         @if(session()->has('success'))
-                            <div class="alert alert-success w-100 rounded-0">
+                            <div class="alert alert-success w-100">
                                 {{ session()->get('success') }}
                             </div>
                         @endif
                         @if(session()->has('error'))
-                            <div class="alert alert-danger w-100 rounded-0">
+                            <div class="alert alert-danger w-100">
                                 {{ session()->get('error') }}
                             </div>
                         @endif
@@ -77,14 +86,14 @@
                                 @endif
                             </select>
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="form-actions">
                             @if(isset($profile))
-                            <button class="btn btn-success" type="submit">
+                            <button class="btn btn-brand text-white" type="submit">
                                 <i class="fa-solid fa-right-from-bracket fa-beat"></i>  Update Profile
                             </button>
-                            <a href="{{ route('bankEmployee') }}" class="btn btn-primary">Go Back</a>
+                            <a href="{{ route('bankEmployee') }}" class="btn btn-outline-secondary">Go Back</a>
                             @else
-                            <button class="btn btn-success" type="submit">
+                            <button class="btn btn-brand text-white" type="submit">
                                 <i class="fa-solid fa-right-from-bracket fa-beat"></i>  Create Profile
                             </button>
                             @endif
@@ -97,52 +106,75 @@
     @if(!isset($profile))
     <div class="col-10 mx-auto my-4">
         <div class="card">
-            <div class="card-header">Employee List</div>
+            <div class="card-header">
+                <i class="fa-solid fa-people-group"></i> Employee List
+            </div>
             <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Employee ID</th>
-                            <th scope="col">Mobile</th>
-                            <th scope="col">Profile Type</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $today  = date('Y-m-d');
-                            $x = 1;
-                        @endphp
-                        @if(!empty($data) && $data->count()>0)
-                            @foreach($data as $d)
-                                <tr>
-                                    <th scope="row">{{ $x }}</th>
-                                    <td>{{ $d->name }}</td>
-                                    <td>{{ $d->employeeId }}</td>
-                                    <td>{{ $d->mobile }}</td>
-                                    <td>@if($d->profileType==1) Super Admin @elseif($d->profileType==2) General Admin @elseif($d->profileType==3) Manager @else Cashier @endif</td>
-                                    <td>
-                                        @if($d->id == $employee_id)
-                                        -
-                                        @else
-                                        <a href="{{ route('editEmployee',['id'=>$d->id]) }}" class="btn btn-sm btn-success" title="Edit Data"><i class="fa-solid fa-file-pen"></i></a>
-                                        <a href="{{ route('delEmployee',['id'=>$d->id]) }}" onclick="confirm('Are you sure to delete this record?')" class="btn btn-sm btn-danger" title="Delete Record"><i class="fa-thin fa-trash-xmark"></i></a>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @php
-                                $x++;
-                                @endphp
-                            @endforeach
-                        @else
-                        <tr>
-                            <td colspan="6">Sorry! No data found</td>
-                        </tr>
-                        @endif
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="employeeListTable" class="table table-striped datatable">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="fw-700">#</th>
+                                <th scope="col" class="fw-700">Name</th>
+                                <th scope="col" class="fw-700">Employee ID</th>
+                                <th scope="col" class="fw-700">Mobile</th>
+                                <th scope="col" class="fw-700">Role</th>
+                                <th scope="col" class="fw-700">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $today  = date('Y-m-d');
+                                $x = 1;
+                            @endphp
+                            @if(!empty($data) && $data->count()>0)
+                                @foreach($data as $d)
+                                    <tr>
+                                        <th scope="row">{{ $x }}</th>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="fa-solid fa-circle-user" style="color: var(--accent);"></i>
+                                                <strong>{{ $d->name }}</strong>
+                                            </div>
+                                        </td>
+                                        <td><code>{{ $d->employeeId }}</code></td>
+                                        <td>{{ $d->mobile }}</td>
+                                        <td>
+                                            @if($d->profileType==1)
+                                                <span class="badge bg-danger"><i class="fa-solid fa-crown"></i> Super Admin</span>
+                                            @elseif($d->profileType==2)
+                                                <span class="badge bg-warning text-dark"><i class="fa-solid fa-user-tie"></i> General Admin</span>
+                                            @elseif($d->profileType==3)
+                                                <span class="badge bg-info"><i class="fa-solid fa-shield"></i> Manager</span>
+                                            @else
+                                                <span class="badge bg-success"><i class="fa-solid fa-user"></i> Cashier</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($d->id == $employee_id)
+                                                <span class="badge bg-light text-muted">Current</span>
+                                            @else
+                                                <a href="{{ route('editEmployee',['id'=>$d->id]) }}" class="btn btn-sm btn-success text-white" title="Edit Employee"><i class="fa-solid fa-file-pen"></i></a>
+                                                <a href="{{ route('delEmployee',['id'=>$d->id]) }}" onclick="return confirm('Are you sure you want to delete this employee?')" class="btn btn-sm btn-danger text-white" title="Delete Employee"><i class="fa-solid fa-trash"></i></a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @php
+                                    $x++;
+                                    @endphp
+                                @endforeach
+                            @else
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <div class="soft-muted">
+                                        <i class="fa-solid fa-inbox"></i> No employees found
+                                    </div>
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

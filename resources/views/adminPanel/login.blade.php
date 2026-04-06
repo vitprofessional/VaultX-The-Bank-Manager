@@ -1,84 +1,126 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Dutch Bangla Bank PLC</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Calculas Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/32dcd4a478.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ asset('public/css/calculas.css') }}">
   </head>
-  <body class="bg-success">
-    <div class="container my-4">
-        <div class="row align-items-center vh-100">
-            <div class="col-8 col-md-5 mx-auto">
-                <div class="card shadow py-4">
-                    <div class="card-body">
-                        <div class="row text-center">
-                            <div class="col-4 mx-auto mb-2">
-                                <img class="w-100" src="https://iconape.com/wp-content/files/az/151369/png/151369.png">
-                            </div>
-                            <h5 class="card-title my-2 mb-4"><i class="fa-sharp fa-regular fa-hand-holding-circle-dollar"></i> Calculas Admin</h5>
-                        </div>
-                        <div class="row">
-                            <div class="col-11 mx-auto">
-                                @if(session()->has('success'))
-                                    <div class="alert alert-success p-2 w-100 rounded-0 fw-bold">
-                                        {{ session()->get('success') }}
-                                    </div>
-                                @endif
-                                @if(session()->has('error'))
-                                    <div class="alert alert-danger w-100 rounded-0 fw-bold">
-                                        {{ session()->get('error') }}
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            @if($allemployee->count()>0)
-                            <form class="form col-11 mx-auto" action="{{ route('loginCalculas') }}" method="POST">
-                                @csrf
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="loginId"><i class="fa-thin fa-lock"></i></span>
-                                    <input type="text" class="form-control" placeholder="Enter login ID" aria-label="loginId" name="loginId" aria-describedby="loginId" required>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="loginPass"><i class="fa-thin fa-key"></i></span>
-                                    <input type="password" class="form-control" placeholder="Enter password" aria-label="loginPass" name="loginPass" aria-describedby="loginPass" required>
-                                </div>
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-success" type="submit"><i class="fa-solid fa-right-from-bracket"></i> Login</button>
-                                </div>
-                            </form>
-                            @else
-                            <form class="form col-11 mx-auto" action="{{ route('registerCalculas') }}" method="POST">
-                                @csrf
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="employeeName"><i class="fa-thin fa-circle-user"></i></span>
-                                    <input type="text" class="form-control" placeholder="Enter employee name" aria-label="employeeName" name="employeeName" aria-describedby="employeeName">
-                                </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="employeeMail"><i class="fa-thin fa-envelope"></i></span>
-                                    <input type="text" class="form-control" placeholder="Enter employee email" aria-label="employeeMail" name="employeeMail" aria-describedby="employeeMail" required>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="loginId"><i class="fa-thin fa-lock"></i></span>
-                                    <input type="text" class="form-control" placeholder="Enter login ID" aria-label="loginId" name="loginId" aria-describedby="loginId" required>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="loginPass"><i class="fa-thin fa-key"></i></span>
-                                    <input type="password" class="form-control" placeholder="Enter password" aria-label="loginPass" name="loginPass" aria-describedby="loginPass" required>
-                                </div>
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-success" type="submit"><i class="fa-solid fa-right-from-bracket fa-beat"></i> Register</button>
-                                </div>
-                            </form>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+  <body class="calculas-auth">
+    <div class="auth-wrap">
+      <section class="auth-brand-panel d-flex align-items-end">
+        <div class="auth-brand-content">
+          <span class="auth-badge"><i class="fa-solid fa-shield-halved"></i> Secure banking workspace</span>
+          <h1 class="auth-title">Calculas Admin</h1>
+          <p class="auth-text text-white-50">A focused back-office panel for cash tracking, account management, reporting, and branch configuration.</p>
+
+          <div class="row g-3 mt-4">
+            <div class="col-12 col-md-4">
+              <div class="app-sidebar-card">
+                <div class="fw-bold text-white">Fast login</div>
+                <div class="soft-muted">Access roles and records in one place.</div>
+              </div>
             </div>
+            <div class="col-12 col-md-4">
+              <div class="app-sidebar-card">
+                <div class="fw-bold text-white">Clear audit flow</div>
+                <div class="soft-muted">Track account, cash, and employee activity.</div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="app-sidebar-card">
+                <div class="fw-bold text-white">Branch settings</div>
+                <div class="soft-muted">Keep business data and branding consistent.</div>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <section class="auth-card-panel">
+        <div class="auth-card">
+          <div class="mb-4 text-center">
+            <div class="mx-auto mb-3 app-brand-mark">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <div class="page-kicker">Banking operations</div>
+            <h2 class="mb-2">Welcome back</h2>
+            <p class="auth-text mb-0">Sign in to continue to the Calculas dashboard.</p>
+          </div>
+
+          @if(session()->has('success'))
+            <div class="alert alert-success border-0 rounded-4">{{ session()->get('success') }}</div>
+          @endif
+
+          @if(session()->has('error'))
+            <div class="alert alert-danger border-0 rounded-4">{{ session()->get('error') }}</div>
+          @endif
+
+          @if($allemployee->count() > 0)
+            <form action="{{ route('loginCalculas') }}" method="POST" class="d-grid gap-3">
+              @csrf
+              <div>
+                <label class="form-label fw-semibold" for="loginId">Login ID</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                  <input type="text" class="form-control form-control-lg" id="loginId" name="loginId" placeholder="Enter login ID" required>
+                </div>
+              </div>
+
+              <div>
+                <label class="form-label fw-semibold" for="loginPass">Password</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+                  <input type="password" class="form-control form-control-lg" id="loginPass" name="loginPass" placeholder="Enter password" required>
+                </div>
+              </div>
+
+              <button class="btn btn-brand btn-lg text-white" type="submit">Sign In</button>
+            </form>
+          @else
+            <form action="{{ route('registerCalculas') }}" method="POST" class="d-grid gap-3">
+              @csrf
+              <div>
+                <label class="form-label fw-semibold" for="employeeName">Employee Name</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                  <input type="text" class="form-control form-control-lg" id="employeeName" name="employeeName" placeholder="Enter employee name" required>
+                </div>
+              </div>
+
+              <div>
+                <label class="form-label fw-semibold" for="employeeMail">Employee Email</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                  <input type="email" class="form-control form-control-lg" id="employeeMail" name="employeeMail" placeholder="Enter employee email" required>
+                </div>
+              </div>
+
+              <div>
+                <label class="form-label fw-semibold" for="loginIdRegister">Login ID</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                  <input type="text" class="form-control form-control-lg" id="loginIdRegister" name="loginId" placeholder="Create login ID" required>
+                </div>
+              </div>
+
+              <div>
+                <label class="form-label fw-semibold" for="loginPassRegister">Password</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                  <input type="password" class="form-control form-control-lg" id="loginPassRegister" name="loginPass" placeholder="Create password" required>
+                </div>
+              </div>
+
+              <button class="btn btn-brand btn-lg text-white" type="submit">Create Admin Profile</button>
+            </form>
+          @endif
+        </div>
+      </section>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

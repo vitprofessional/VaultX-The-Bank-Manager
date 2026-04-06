@@ -50,7 +50,7 @@ class ServerConfiguration extends Controller
             $server = new ServerConfig();
         endif;
         request()->validate([
-            'file' => 'mimes:jpeg,png,jpg,gif,svg|max:300',
+            'bankLogo' => 'required|mimes:jpeg,png,jpg,gif,svg|max:300',
         ]);
 
         // check if logos are available
@@ -76,12 +76,12 @@ class ServerConfiguration extends Controller
             $server = new ServerConfig();
         endif;
         request()->validate([
-            'file' => 'mimes:jpeg,png,jpg,gif,svg|max:300',
+            'secondLogo' => 'required|mimes:jpeg,png,jpg,gif,svg|max:300',
         ]);
         // check if second logo available
         if($requ->secondLogo):
             $logo2 = time().'.'.request()->secondLogo->getClientOriginalExtension();
-            request()->secondLogo->move(public_path('upload\logos'), $logo2);
+            request()->secondLogo->move(public_path('upload/logos'), $logo2);
             $server->logo_2 = $logo2;
         endif;
 
@@ -100,7 +100,7 @@ class ServerConfiguration extends Controller
             $server = new ServerConfig();
         endif;
         request()->validate([
-            'file' => 'mimes:jpeg,png,jpg,gif,svg|max:300',
+            'thirdLogo' => 'required|mimes:jpeg,png,jpg,gif,svg|max:300',
         ]);
         // check if third logo available
         if($requ->thirdLogo):

@@ -43,12 +43,12 @@
 <div class="row align-items-center v-100">
     <div class="col-12 mb-3">
         @if(session()->has('success'))
-            <div class="alert alert-success w-100 rounded-0">
+            <div class="alert alert-success w-100">
                 {{ session()->get('success') }}
             </div>
         @endif
         @if(session()->has('error'))
-            <div class="alert alert-danger w-100 rounded-0">
+            <div class="alert alert-danger w-100">
                 {{ session()->get('error') }}
             </div>
         @endif

@@ -51,14 +51,12 @@ class FrontController extends Controller
     public function acUpdate(Request $requ){
         $data = AccountList::find($requ->acId);
         if(isset($data)):
-            $employee_id        = $requ->employeeId;
-
             $data->acName       = $requ->acName;
             $data->acNumber     = $requ->acNo;
             $data->acType       = $requ->acType;
             $data->acMobile     = $requ->acMobile;
             $data->acFinger     = $requ->acFinger;
-            $data->employee_id  = $requ->employee_id;
+            $data->employee_id  = $requ->employeeId;
 
             if($data->save()):
                 return back()->with('success','Success! Account update successfully');
@@ -73,6 +71,17 @@ class FrontController extends Controller
 
     public function acDel($id){
         $acData = AccountList::find($id);
+        if(!empty($acData)):
+            if($acData->delete()):
+                return back()->with('success','Records successfully deleted');
+            endif;
+        endif;
+
+        return back()->with('error','No records found for deleted');
+    }
+
+    public function acDelete($id){
+        return $this->acDel($id);
     }
 
     public function editEmployee($id){

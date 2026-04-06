@@ -1,13 +1,24 @@
 @extends('adminPanel.include')
 @section('calculasTitle') Update Account @endsection
 @section('calculasBody')
+
+<div class="page-header">
+    <div>
+        <div class="page-kicker">Account Management</div>
+        <h1 class="page-title">Update Account</h1>
+        <p class="page-copy">Edit account details with consistent data and profile information.</p>
+    </div>
+</div>
+
 <div class="row align-items-center v-100">
     <div class="col-10 col-md-6 mx-auto my-4">
         <div class="row mb-2">
             <div class="col-12 mx-auto text-center mt-4">
-                <a class="btn btn-success btn-sm noprint mx-auto" href="{{ route('accountCreation') }}"><i class="fas fa-plus"></i> Add New</a>
-                <a href="{{ route('acList') }}" class="btn btn-primary btn-sm noprint mx-auto"><i class="fas fa-users"></i> Account List</a>
-                <a href="{{ route('acView',['id'=>$data->id]) }}" class="btn btn-sm btn-success noprint mx-auto" title="View Data"><i class="fa-solid fa-eye"></i> View Data</a>
+                <div class="action-toolbar justify-content-center">
+                    <a class="btn btn-success btn-sm noprint" href="{{ route('accountCreation') }}"><i class="fas fa-plus"></i> Add New</a>
+                    <a href="{{ route('acList') }}" class="btn btn-primary btn-sm noprint"><i class="fas fa-users"></i> Account List</a>
+                    <a href="{{ route('acView',['id'=>$data->id]) }}" class="btn btn-sm btn-success noprint" title="View Data"><i class="fa-solid fa-eye"></i> View Data</a>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -16,12 +27,12 @@
                 <div class="row">
                     <div class="col-12">
                         @if(session()->has('success'))
-                            <div class="alert alert-success w-100 rounded-0">
+                            <div class="alert alert-success w-100">
                                 {{ session()->get('success') }}
                             </div>
                         @endif
                         @if(session()->has('error'))
-                            <div class="alert alert-danger w-100 rounded-0">
+                            <div class="alert alert-danger w-100">
                                 {{ session()->get('error') }}
                             </div>
                         @endif
@@ -30,7 +41,7 @@
                 @if(isset($data))
                 <div class="row">
                     @if($data->employee_id == $employee_id)
-                    <form class="g-3 card-body" method="POST" action="{{ route('acUpdate') }}">
+                    <form class="row g-3" method="POST" action="{{ route('acUpdate') }}">
                         @csrf
                         <input type="hidden" name="acId" value="{{ $data->id }}">
                         <div class="col-12">
@@ -72,8 +83,9 @@
                                 <option value="R5">R5</option>
                             </select>
                         </div>
-                        <div class="col-12 mt-4">
-                            <button type="submit" class="btn btn-primary">Update</button>
+                        <div class="col-12 form-actions">
+                            <button type="submit" class="btn btn-brand text-white">Update Account</button>
+                            <a href="{{ route('acList') }}" class="btn btn-outline-secondary">Cancel</a>
                         </div>
                     </form>
                     @else
