@@ -84,7 +84,7 @@
     .account-view-table td {
         border: 0.2mm solid #2f3742;
         padding: 0.2rem 0.5rem;
-        font-size: 2mm;
+        font-size: 2.45mm;
         line-height: 1;
         color: #111827;
         vertical-align: middle;
@@ -261,9 +261,8 @@
                     </div>
 
                     <div class="account-bank-meta">
-                        <p><strong>Branch:</strong> {{ $linked_branch }}, Cumilla</p>
+                        <p><strong>Branch:</strong> {{ $linked_branch }}, <strong>District:</strong> {{ $branch_district }}</p>
                         <p><strong>Routing Number:</strong> {{ $routing_number }}, <strong>SWIFT:</strong> {{ $swift_code }}</p>
-                        <p><strong>Contact:</strong> {{ $contactNo }}, <strong>Helpline:</strong> {{ $helpline }}</p>
                     </div>
                     
                 <div class="p-2 bg-secondary fw-bold text-white">Account Details</div>
@@ -279,21 +278,20 @@
                                 <td colspan="3">{{ $data->acNumber }}</td>
                             </tr>
                             <tr>
-                                <th>Type of Account</th>
-                                <td colspan="3">{{ $data->acType }}</td>
+                                <th width="20%">Account Type</th>
+                                <td width="25%">{{ $data->acType }}</td>
+                                <th width="20%">Mobile</th>
+                                <td width="35%">{{ $data->acMobile }}</td>
                             </tr>
                             <tr>
-                                <th>Mobile Number</th>
-                                <td colspan="3">{{ $data->acMobile }}</td>
-                            </tr>
-                            <tr>
-                                <th>A/C Finger</th>
+                                <th>Thumb</th>
                                 <td class="label-tight">{{ $data->acFinger }}</td>
-                                <th class="label-tight">Outlet Name</th>
+                                <th class="label-tight">Outlet</th>
                                 <td>Virtual IT Professional</td>
                             </tr>
                         </tbody>
                     </table>
+                    <p class="mt-3"><strong>Branch:</strong> {{ $contactNo }} <strong>(9.30AM-5.30PM)</strong>, <strong>Helpline:</strong> {{ $helpline }} <strong>(24/7)</strong> </p>
                     @else
                     <div class="alert alert-info">
                         <i class="fa-solid fa-info-circle"></i>
