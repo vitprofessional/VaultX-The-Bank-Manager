@@ -54,9 +54,9 @@ class FrontController extends Controller
             $data->acName       = $requ->acName;
             $data->acNumber     = $requ->acNo;
             $data->acType       = $requ->acType;
-            $data->acMobile     = $requ->acMobile;
+            $data->acMobile     = trim((string) $requ->acMobile);
             $data->acFinger     = $requ->acFinger;
-            $data->employee_id  = $requ->employeeId;
+            $data->employee_id  = $requ->employeeId ?? $data->employee_id;
 
             if($data->save()):
                 return back()->with('success','Success! Account update successfully');

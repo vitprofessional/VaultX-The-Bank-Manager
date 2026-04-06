@@ -6,97 +6,152 @@
     <div>
         <div class="page-kicker">Account Management</div>
         <h1 class="page-title">Update Account</h1>
-        <p class="page-copy">Edit account details with consistent data and profile information.</p>
+        <p class="page-copy">Edit customer account information with the same structure used in account creation.</p>
+    </div>
+    <div class="action-toolbar noprint">
+        <a href="{{ route('acList') }}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Back to Accounts
+        </a>
+        @if(isset($data))
+            <a href="{{ route('acView',['id'=>$data->id]) }}" class="btn btn-outline-primary" title="View Data">
+                <i class="fa-solid fa-eye"></i> View Data
+            </a>
+        @endif
     </div>
 </div>
 
-<div class="row align-items-center v-100">
-    <div class="col-10 col-md-6 mx-auto my-4">
-        <div class="row mb-2">
-            <div class="col-12 mx-auto text-center mt-4">
-                <div class="action-toolbar justify-content-center">
-                    <a class="btn btn-success btn-sm noprint" href="{{ route('accountCreation') }}"><i class="fas fa-plus"></i> Add New</a>
-                    <a href="{{ route('acList') }}" class="btn btn-primary btn-sm noprint"><i class="fas fa-users"></i> Account List</a>
-                    <a href="{{ route('acView',['id'=>$data->id]) }}" class="btn btn-sm btn-success noprint" title="View Data"><i class="fa-solid fa-eye"></i> View Data</a>
-                </div>
-            </div>
-        </div>
+<div class="row g-4 align-items-start">
+    <div class="col-12 col-lg-7">
         <div class="card">
-            <div class="card-header">Account Update</div>
+            <div class="card-header">
+                <i class="fa-solid fa-user-pen"></i> Account Information
+            </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        @if(session()->has('success'))
-                            <div class="alert alert-success w-100">
-                                {{ session()->get('success') }}
-                            </div>
-                        @endif
-                        @if(session()->has('error'))
-                            <div class="alert alert-danger w-100">
-                                {{ session()->get('error') }}
-                            </div>
-                        @endif
+                @if(session()->has('success'))
+                    <div class="alert alert-success">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>{{ session()->get('success') }}</span>
                     </div>
-                </div>
+                @endif
+
+                @if(session()->has('error'))
+                    <div class="alert alert-danger">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ session()->get('error') }}</span>
+                    </div>
+                @endif
+
                 @if(isset($data))
-                <div class="row">
                     @if($data->employee_id == $employee_id)
                     <form class="row g-3" method="POST" action="{{ route('acUpdate') }}">
                         @csrf
                         <input type="hidden" name="acId" value="{{ $data->id }}">
+                        <input type="hidden" name="employeeId" value="{{ $employee_id }}">
+
                         <div class="col-12">
-                            <label for="acName" class="form-label">Account Name</label>
-                            <input type="text" class="form-control" value="{{ $data->acName }}" name="acName" id="acName" placeholder="Enter the name of account holder" />
+                            <label for="acName" class="form-label">Account Holder Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" class="form-control form-control-lg" value="{{ $data->acName }}" name="acName" id="acName" placeholder="Enter full name" required>
+                            </div>
                         </div>
-                        <div class="col-12">
-                            <label for="acNo" class="form-label">A/C Number</label>
-                            <input type="number" maxlength="13" class="form-control" id="acNo" value="{{ $data->acNumber }}" name="acNo" placeholder="Enter the account number" />
+
+                        <div class="col-12 col-md-6">
+                            <label for="acNo" class="form-label">Account Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-credit-card"></i></span>
+                                <input type="number" class="form-control form-control-lg" id="acNo" value="{{ $data->acNumber }}" name="acNo" placeholder="Enter account number" maxlength="13" required>
+                            </div>
                         </div>
-                        <div class="col-12">
-                            <label for="acType" class="form-label">A/C Type</label>
-                            <select id="acType" class="form-select" name="acType" require>
-                                <option value="{{ $data->acType }}">{{ $data->acType }}</option>
-                                <option value="Savings">Savings</option>
-                                <option value="Current">Current</option>
-                                <option value="School Banking">School Banking</option>
-                                <option value="Interest Fee">Interest Fee</option>
-                                <option value="Salary">Salary</option>
+
+                        <div class="col-12 col-md-6">
+                            <label for="acType" class="form-label">Account Type</label>
+                            <select id="acType" class="form-select form-select-lg" name="acType" required>
+                                <option value="Savings" @selected($data->acType == 'Savings')>Savings Account</option>
+                                <option value="Current" @selected($data->acType == 'Current')>Current Account</option>
+                                <option value="School Banking" @selected($data->acType == 'School Banking')>School Banking</option>
+                                <option value="Interest Fee" @selected($data->acType == 'Interest Fee')>Interest Fee</option>
+                                <option value="Salary" @selected($data->acType == 'Salary')>Salary Account</option>
                             </select>
                         </div>
+
                         <div class="col-12">
                             <label for="acMobile" class="form-label">Mobile Number</label>
-                            <input type="text" class="form-control" value="{{ $data->acMobile }}" name="acMobile" id="acMobile" placeholder="Enter the mobile number of account holder" />
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-mobile"></i></span>
+                                <input type="text" class="form-control form-control-lg" value="{{ $data->acMobile }}" name="acMobile" id="acMobile" placeholder="Enter mobile number" required maxlength="20">
+                            </div>
                         </div>
+
                         <div class="col-12">
-                            <label for="acFinger" class="form-label">A/C Finger</label>
-                            <select id="acFinger" class="form-select" name="acFinger" require>
-                                <option value="{{ $data->acFinger }}">{{ $data->acFinger }}</option>
-                                <option value="L1">L1</option>
-                                <option value="L2">L2</option>
-                                <option value="L3">L3</option>
-                                <option value="L4">L4</option>
-                                <option value="L5">L5</option>
-                                <option value="R1">R1</option>
-                                <option value="R2">R2</option>
-                                <option value="R3">R3</option>
-                                <option value="R4">R4</option>
-                                <option value="R5">R5</option>
+                            <label for="acFinger" class="form-label">Fingerprint ID</label>
+                            <select id="acFinger" class="form-select form-select-lg" name="acFinger" required>
+                                <optgroup label="Left Hand">
+                                    <option value="L1" @selected($data->acFinger == 'L1')>Left Thumb (L1)</option>
+                                    <option value="L2" @selected($data->acFinger == 'L2')>Left Index (L2)</option>
+                                    <option value="L3" @selected($data->acFinger == 'L3')>Left Middle (L3)</option>
+                                    <option value="L4" @selected($data->acFinger == 'L4')>Left Ring (L4)</option>
+                                    <option value="L5" @selected($data->acFinger == 'L5')>Left Pinky (L5)</option>
+                                </optgroup>
+                                <optgroup label="Right Hand">
+                                    <option value="R1" @selected($data->acFinger == 'R1')>Right Thumb (R1)</option>
+                                    <option value="R2" @selected($data->acFinger == 'R2')>Right Index (R2)</option>
+                                    <option value="R3" @selected($data->acFinger == 'R3')>Right Middle (R3)</option>
+                                    <option value="R4" @selected($data->acFinger == 'R4')>Right Ring (R4)</option>
+                                    <option value="R5" @selected($data->acFinger == 'R5')>Right Pinky (R5)</option>
+                                </optgroup>
                             </select>
                         </div>
-                        <div class="col-12 form-actions">
-                            <button type="submit" class="btn btn-brand text-white">Update Account</button>
-                            <a href="{{ route('acList') }}" class="btn btn-outline-secondary">Cancel</a>
+
+                        <div class="col-12 d-flex gap-2 pt-2">
+                            <button type="submit" class="btn btn-brand text-white btn-lg">
+                                <i class="fa-solid fa-floppy-disk"></i> Update Account
+                            </button>
+                            <a href="{{ route('acList') }}" class="btn btn-outline-secondary btn-lg">Cancel</a>
                         </div>
                     </form>
                     @else
-                        <div class="alert alert-info">Sorry! You are not the author to edit this account details.</div>
+                        <div class="alert alert-info">
+                            <i class="fa-solid fa-info-circle"></i>
+                            <span>Sorry! You are not the author to edit this account details.</span>
+                        </div>
                     @endif
-                </div>
                 @else
                 <div class="alert alert-info">
-                    Sorry! No data found
+                    <i class="fa-solid fa-info-circle"></i>
+                    <span>Sorry! No data found</span>
                 </div>
                 @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-lightbulb"></i> Account Types Guide
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="fw-bold">Savings Account</h6>
+                    <small class="text-muted">For individual customers with regular deposits and withdrawals</small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="fw-bold">Current Account</h6>
+                    <small class="text-muted">For businesses requiring frequent transactions</small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="fw-bold">School Banking</h6>
+                    <small class="text-muted">Special accounts for school students</small>
+                </div>
+                <div class="mb-3">
+                    <h6 class="fw-bold">Interest Fee</h6>
+                    <small class="text-muted">Accounts with interest-based operations</small>
+                </div>
+                <div class="mb-0">
+                    <h6 class="fw-bold">Salary Account</h6>
+                    <small class="text-muted">For employees receiving regular salary deposits</small>
+                </div>
             </div>
         </div>
     </div>

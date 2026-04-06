@@ -107,6 +107,29 @@
         white-space: nowrap;
     }
 
+    .account-details-title {
+        padding: 0.5rem 0.75rem;
+        background: #2f3742;
+        color: #ffffff;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+    }
+
+    .account-details-note {
+        color: #1f2937;
+        font-size: 2.3mm;
+        line-height: 1.35;
+        margin-top: 0.6rem;
+    }
+
+    .account-view-table th {
+        color: #0f172a;
+    }
+
+    .account-view-table td {
+        color: #111827;
+    }
+
     @media print {
         @page {
             size: auto;
@@ -265,8 +288,23 @@
                         <p><strong>Routing Number:</strong> {{ $routing_number }}, <strong>SWIFT:</strong> {{ $swift_code }}</p>
                     </div>
                     
-                <div class="p-2 bg-secondary fw-bold text-white">Account Details</div>
+                <div class="account-details-title">Account Details</div>
                     @if(isset($data))
+                    @php
+                        $thumbLabels = [
+                            'L1' => 'Left Thumb (L1)',
+                            'L2' => 'Left Index (L2)',
+                            'L3' => 'Left Middle (L3)',
+                            'L4' => 'Left Ring (L4)',
+                            'L5' => 'Left Pinky (L5)',
+                            'R1' => 'Right Thumb (R1)',
+                            'R2' => 'Right Index (R2)',
+                            'R3' => 'Right Middle (R3)',
+                            'R4' => 'Right Ring (R4)',
+                            'R5' => 'Right Pinky (R5)',
+                        ];
+                        $thumbLabel = $thumbLabels[$data->acFinger] ?? $data->acFinger;
+                    @endphp
                     <table class="account-view-table">
                         <tbody>
                             <tr>
@@ -285,13 +323,13 @@
                             </tr>
                             <tr>
                                 <th>Thumb</th>
-                                <td class="label-tight">{{ $data->acFinger }}</td>
+                                <td class="label-tight">{{ $thumbLabel }}</td>
                                 <th class="label-tight">Outlet</th>
                                 <td>Virtual IT Professional</td>
                             </tr>
                         </tbody>
                     </table>
-                    <p class="mt-3"><strong>Branch:</strong> {{ $contactNo }} <strong>(9.30AM-5.30PM)</strong>, <strong>Helpline:</strong> {{ $helpline }} <strong>(24/7)</strong> </p>
+                    <p class="account-details-note"><strong>Branch:</strong> {{ $contactNo }} <strong>(9.30AM-5.30PM)</strong>, <strong>Helpline:</strong> {{ $helpline }} <strong>(24/7)</strong> </p>
                     @else
                     <div class="alert alert-info">
                         <i class="fa-solid fa-info-circle"></i>
