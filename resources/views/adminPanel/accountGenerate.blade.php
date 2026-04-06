@@ -109,40 +109,91 @@
 
     @media print {
         @page {
-            size: 89mm 51mm landscape;
-            margin: 1.8mm;
+            size: auto;
+            margin: 0;
         }
 
         html,
         body {
+            background: #ffffff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 100% !important;
+            overflow: hidden !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
 
-        body * {
-            visibility: hidden;
+        .row.align-items-center.v-100 {
+            min-height: auto !important;
+            height: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
-        #printArea,
-        #printArea * {
-            visibility: visible;
+        .row.align-items-center.v-100 > :not(#printArea) {
+            display: none !important;
         }
 
         #printArea {
-            position: fixed;
-            inset: 0;
+            position: relative !important;
+            inset: auto !important;
+            width: 100% !important;
+            min-height: 100vh !important;
             margin: 0 !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
+            display: grid !important;
+            justify-items: center !important;
+            align-items: start !important;
+            padding: 8mm 6mm 0 !important;
+            box-sizing: border-box !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            page-break-before: avoid !important;
+            page-break-after: avoid !important;
+            overflow: hidden !important;
         }
 
         #printArea .account-print-wrap {
             width: 89mm !important;
             max-width: 89mm !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+        }
+
+        #printArea .row,
+        #printArea [class*='col-'],
+        #printArea .account {
             margin: 0 !important;
             padding: 0 !important;
+        }
+
+        #printArea .account-view-card {
+            margin: 0 auto !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            page-break-before: avoid !important;
+            page-break-after: avoid !important;
+        }
+
+        #printArea .account-view-table {
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+            border: 0.2mm solid #2f3742 !important;
+            background: #ffffff !important;
+        }
+
+        #printArea .account-view-table th,
+        #printArea .account-view-table td {
+            border: 0.2mm solid #2f3742 !important;
+            color: #111827 !important;
+        }
+
+        #printArea .account-view-table th {
+            background: #f2f5f7 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
         .noprint {

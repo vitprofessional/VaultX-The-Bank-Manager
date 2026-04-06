@@ -7,6 +7,7 @@
         overflow: hidden;
         background: #fff;
         box-shadow: none;
+        margin-bottom: 0.5rem !important;
     }
 
     .report-panel .card-header {
@@ -14,6 +15,12 @@
         color: #111827;
         border-bottom: 1px solid #d3dae0;
         font-weight: 700;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.95rem;
+    }
+
+    .report-panel .card-body {
+        padding: 0.6rem !important;
     }
 
     .report-plain-table {
@@ -27,20 +34,25 @@
         border-bottom: 1px solid #d3dae0;
         text-transform: none;
         letter-spacing: 0;
+        padding: 0.4rem 0.6rem !important;
+        font-size: 0.95rem;
     }
 
     .report-plain-table tbody td,
     .report-plain-table tbody th {
         border-bottom: 1px solid #dfe5ea;
         color: #111827;
+        padding: 0.35rem 0.6rem !important;
+        font-size: 0.93rem;
     }
 
     .report-total-row td {
-        font-size: 1.05rem;
+        font-size: 0.98rem;
         font-weight: 800;
         background: #f2f4f7;
         color: #111827;
         border-top: 1px solid #cfd6dd;
+        padding: 0.4rem 0.6rem !important;
     }
 
     .report-summary-table {
@@ -52,10 +64,10 @@
     .report-summary-table th,
     .report-summary-table td {
         border: 1px solid #d3dae0;
-        padding: 0.45rem 0.75rem;
+        padding: 0.35rem 0.6rem !important;
         color: #111827;
-        font-size: 0.98rem;
-        line-height: 1.2;
+        font-size: 0.93rem;
+        line-height: 1.1;
     }
 
     .report-summary-table th {
@@ -95,6 +107,12 @@
         #printArea > [class*='col-'] {
             break-inside: avoid;
             page-break-inside: avoid;
+            margin-top: 0.3rem !important;
+            margin-bottom: 0.3rem !important;
+        }
+
+        #printArea .row {
+            gap: 0.3rem !important;
         }
 
         .report-panel {
@@ -109,6 +127,29 @@
             border-bottom: 1px solid #cfd6dd !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+            padding: 0.4rem 0.6rem !important;
+        }
+
+        .report-panel .card-body {
+            padding: 0.4rem !important;
+        }
+
+        .report-plain-table thead th {
+            padding: 0.3rem 0.5rem !important;
+        }
+
+        .report-plain-table tbody td,
+        .report-plain-table tbody th {
+            padding: 0.25rem 0.5rem !important;
+        }
+
+        .report-total-row td {
+            padding: 0.3rem 0.5rem !important;
+        }
+
+        .report-summary-table th,
+        .report-summary-table td {
+            padding: 0.3rem 0.5rem !important;
         }
 
         .report-plain-table thead th,
