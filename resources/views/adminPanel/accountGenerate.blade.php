@@ -112,7 +112,7 @@
         padding: 0.2rem 0.5rem;
         font-size: 0.75rem;
         border-bottom: none !important;
-        border: 1px solid #0c673d;
+        border: 1px solid #000000;
         color: #000;
         font-weight: bold;
         letter-spacing: 0.01em;
