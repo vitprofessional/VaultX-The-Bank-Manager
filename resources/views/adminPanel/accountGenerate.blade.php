@@ -109,10 +109,12 @@
     }
 
     .account-details-title {
-        padding: 0.5rem 0.75rem;
-        background: #0c673d;
-        color: #ffffff;
-        font-weight: 800;
+        padding: 0.2rem 0.5rem;
+        font-size: 0.75rem;
+        border-bottom: none !important;
+        border: 1px solid #0c673d;
+        color: #000;
+        font-weight: bold;
         letter-spacing: 0.01em;
     }
 
@@ -290,7 +292,7 @@
                         <p><strong>Routing Number:</strong> {{ $routing_number }}, <strong>SWIFT:</strong> {{ $swift_code }}</p>
                     </div>
                     
-                <div class="account-details-title">Account Details</div>
+                <div class="account-details-title">Account Details Card</div>
                     @if(isset($data))
                     @php
                         $thumbLabels = [
