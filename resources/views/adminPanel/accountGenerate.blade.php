@@ -202,11 +202,6 @@
             page-break-after: avoid !important;
         }
 
-        #printArea .account-details-title {
-            background: #ffffff !important;
-            color: #111827 !important;
-        }
-
         #printArea .account-view-table {
             border-collapse: collapse !important;
             border-spacing: 0 !important;
