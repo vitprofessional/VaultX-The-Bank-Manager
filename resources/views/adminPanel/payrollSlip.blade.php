@@ -2,6 +2,16 @@
 @section('calculasTitle') Payroll Slip @endsection
 
 <style>
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    html,
+    body {
+        background: #ffffff;
+    }
+
     .slip-wrap {
         max-width: 900px;
         margin: 0 auto;
@@ -25,6 +35,13 @@
         padding: 1.35rem;
     }
 
+    .slip-section-title {
+        font-weight: 700;
+        font-size: 0.92rem;
+        color: #0f3554;
+        margin-bottom: 0.45rem;
+    }
+
     .slip-kv {
         display: grid;
         grid-template-columns: 1fr auto;
@@ -37,7 +54,59 @@
         color: #0f172a;
     }
 
+    .slip-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    .slip-summary-box {
+        border: 1px solid #d7dce5;
+        border-radius: 0.75rem;
+        padding: 0.65rem 0.5rem;
+        text-align: center;
+        background: #ffffff;
+    }
+
+    .slip-summary-box strong {
+        display: block;
+        font-size: 1.1rem;
+        line-height: 1.1;
+        color: #0f172a;
+    }
+
+    .slip-summary-box span {
+        display: block;
+        font-size: 0.8rem;
+        color: #475569;
+    }
+
+    .slip-note {
+        border: 1px solid #d7dce5;
+        border-radius: 0.75rem;
+        padding: 0.75rem 0.85rem;
+        background: #ffffff;
+        color: #334155;
+    }
+
     @media print {
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        html,
+        body {
+            background: #ffffff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
         .noprint,
         .app-sidebar,
         .app-topbar {
@@ -50,14 +119,77 @@
             margin: 0 !important;
             padding: 0 !important;
             max-width: 100% !important;
+            width: 100% !important;
+            min-height: 0 !important;
+        }
+
+        .app-shell,
+        .app-main,
+        .app-content {
+            display: block !important;
+        }
+
+        .app-shell,
+        .app-main {
+            min-height: 0 !important;
+            height: auto !important;
+        }
+
+        .app-content > :not(.slip-wrap) {
+            display: none !important;
         }
 
         .slip-card,
-        .slip-head {
+        .slip-head,
+        .slip-body,
+        .slip-summary-box,
+        .slip-note {
             background: #ffffff !important;
             color: #111827 !important;
             box-shadow: none !important;
             border-color: #d1d5db !important;
+        }
+
+        .slip-card {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            border-radius: 12px !important;
+            border-width: 1px !important;
+            box-shadow: none !important;
+            page-break-after: avoid !important;
+        }
+
+        .slip-head {
+            padding: 0.85rem 1rem !important;
+        }
+
+        .slip-body {
+            padding: 0.9rem 1rem !important;
+        }
+
+        .slip-summary-grid {
+            gap: 0.4rem !important;
+        }
+
+        .slip-summary-box {
+            padding: 0.45rem 0.35rem !important;
+        }
+
+        .slip-summary-box strong {
+            font-size: 1rem !important;
+        }
+
+        .slip-section-title {
+            margin-bottom: 0.3rem !important;
+        }
+
+        .slip-kv {
+            padding: 0.28rem 0 !important;
+            gap: 0.35rem !important;
+        }
+
+        .slip-note {
+            padding: 0.55rem 0.7rem !important;
         }
     }
 </style>
@@ -83,59 +215,6 @@
 </div>
 
 <div class="slip-wrap">
-    <div class="slip-card">
-        <div class="slip-head">
-            <h4 class="mb-1">{{ $serverData->bank_name ?? 'Bank Manager' }}</h4>
-            <div>Payroll Month: <strong>{{ $payroll->payroll_month }}</strong></div>
-        </div>
-
-        <div class="slip-body">
-            <div class="row g-4">
-                <div class="col-12 col-md-6">
-                    <h6 class="fw-bold">Employee Information</h6>
-                    <div class="slip-kv"><span>Name</span><strong>{{ $payroll->employee->full_name ?? '-' }}</strong></div>
-                    <div class="slip-kv"><span>Employee Code</span><strong>{{ $payroll->employee->employee_code ?? '-' }}</strong></div>
-                    <div class="slip-kv"><span>Department</span><strong>{{ $payroll->employee->department ?: '-' }}</strong></div>
-                    <div class="slip-kv"><span>Designation</span><strong>{{ $payroll->employee->designation ?: '-' }}</strong></div>
-                    <div class="slip-kv"><span>Status</span><strong class="text-capitalize">{{ $payroll->payment_status }}</strong></div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <h6 class="fw-bold">Salary Breakdown</h6>
-                    <div class="slip-kv"><span>Basic Salary</span><strong>{{ number_format((float) $payroll->basic_salary, 2) }}</strong></div>
-                    <div class="slip-kv"><span>Allowance</span><strong>{{ number_format((float) $payroll->allowance, 2) }}</strong></div>
-                    <div class="slip-kv"><span>Bonus</span><strong>{{ number_format((float) $payroll->bonus, 2) }}</strong></div>
-                    <div class="slip-kv"><span>Overtime</span><strong>{{ number_format((float) $payroll->overtime, 2) }}</strong></div>
-                    <div class="slip-kv"><span>Gross Salary</span><strong>{{ number_format((float) $payroll->gross_salary, 2) }}</strong></div>
-                    <div class="slip-kv"><span>Total Deductions</span><strong>{{ number_format((float) ($payroll->tax + $payroll->deduction + $payroll->loan + $payroll->other_deduction), 2) }}</strong></div>
-                    <div class="slip-kv"><span>Attendance Deduction</span><strong>{{ number_format((float) $payroll->attendance_deduction, 2) }}</strong></div>
-                    <div class="slip-kv"><span>Net Salary</span><strong>{{ number_format((float) $payroll->net_salary, 2) }}</strong></div>
-                </div>
-            </div>
-
-            <div class="row g-3 mt-1">
-                <div class="col-6 col-md-3"><div class="alert alert-light mb-0 text-center"><strong>{{ (int) $payroll->present_days }}</strong><br>Present</div></div>
-                <div class="col-6 col-md-3"><div class="alert alert-light mb-0 text-center"><strong>{{ (int) $payroll->late_days }}</strong><br>Late</div></div>
-                <div class="col-6 col-md-3"><div class="alert alert-light mb-0 text-center"><strong>{{ (int) $payroll->absent_days }}</strong><br>Absent</div></div>
-                <div class="col-6 col-md-3"><div class="alert alert-light mb-0 text-center"><strong>{{ (int) $payroll->leave_days }}</strong><br>Leave</div></div>
-            </div>
-
-            @if(!empty($payroll->salary_preset_source))
-                <div class="mt-3 small text-muted">
-                    Salary preset source: {{ $payroll->salary_preset_source }}
-                </div>
-            @endif
-
-            @if(!empty($payroll->note))
-                <div class="mt-3">
-                    <h6 class="fw-bold">Notes</h6>
-                    <p class="mb-0 text-muted">{{ $payroll->note }}</p>
-                </div>
-            @endif
-
-            <div class="mt-4 small text-muted">
-                Generated on {{ date('Y-m-d H:i') }}
-            </div>
-        </div>
-    </div>
+    @include('adminPanel._payrollSlipContent')
 </div>
 @endsection

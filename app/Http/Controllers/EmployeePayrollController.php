@@ -34,6 +34,7 @@ class EmployeePayrollController extends Controller
             'attendanceRecords' => $attendanceRecords,
             'selectedMonth' => $selectedMonth,
             'salaryPresets' => config('hr.salary_presets', []),
+            'generatedEmployeeCode' => $this->generateUniqueEmployeeCode(),
         ]);
     }
 
@@ -67,15 +68,11 @@ class EmployeePayrollController extends Controller
     public function saveEmployee(Request $request)
     {
         $employeeId = $request->employee_profile_id;
-        $uniqueRule = 'unique:staff_employees,employee_code';
-        if (!empty($employeeId)) {
-            $uniqueRule .= ',' . $employeeId;
-        }
 
         $validated = $request->validate([
             'employee_profile_id' => ['nullable', 'integer'],
             'full_name' => ['required', 'string', 'max:255'],
-            'employee_code' => ['required', 'string', 'max:60', $uniqueRule],
+            'employee_code' => ['nullable', 'string', 'max:60'],
             'email' => ['nullable', 'email', 'max:255'],
             'mobile' => ['nullable', 'string', 'max:30'],
             'designation' => ['nullable', 'string', 'max:100'],
@@ -90,10 +87,10 @@ class EmployeePayrollController extends Controller
         } else {
             $employee = new StaffEmployee();
             $employee->created_by = $this->currentAdminId();
+            $employee->employee_code = $this->generateUniqueEmployeeCode();
         }
 
         $employee->full_name = $validated['full_name'];
-        $employee->employee_code = $validated['employee_code'];
         $employee->email = $validated['email'] ?? null;
         $employee->mobile = $validated['mobile'] ?? null;
         $employee->designation = $validated['designation'] ?? null;
@@ -285,6 +282,15 @@ class EmployeePayrollController extends Controller
         $end = \Carbon\Carbon::createFromFormat('Y-m', $selectedMonth)->endOfMonth()->toDateString();
 
         return [$start, $end];
+    }
+
+    private function generateUniqueEmployeeCode(): string
+    {
+        do {
+            $code = 'EMP-' . date('Y') .random_int(1000, 9999);
+        } while (StaffEmployee::where('employee_code', $code)->exists());
+
+        return $code;
     }
 
     private function resolvePresetForEmployee(StaffEmployee $employee, ?string $requestedPresetKey): array

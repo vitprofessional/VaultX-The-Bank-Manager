@@ -69,9 +69,10 @@
                         @endif
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="profileType"><i class="fa-light fa-layer-group"></i></span>
-                            <select name="profileType" id="profileType" class="form-control">
+                            <select name="profileType" id="profileType" class="form-control" required>
+                                <option value="">Select role type</option>
                                 @if(!empty($profileType))
-                                    <option value="4">@if($profileType==1) Super Admin @elseif($profileType==2) General Admin @elseif($profileType==3) Manager @else Cashier @endif</option>
+                                    <option value="{{ $profileType }}" selected>@if($profileType==1) Super Admin @elseif($profileType==2) General Admin @elseif($profileType==3) Manager @else Cashier @endif</option>
                                 @endif
                                 @if(Session::get('superAdmin'))
                                 <option value="4">Cashier</option>

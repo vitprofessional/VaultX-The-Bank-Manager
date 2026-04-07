@@ -32,6 +32,8 @@
     $departmentPresets = $salaryPresets['departments'] ?? [];
     $designationPresets = $salaryPresets['designations'] ?? [];
     $attendanceSettings = $salaryPresets['attendance'] ?? [];
+    $departmentOptions = array_unique(array_merge(array_keys($departmentPresets), ['Accounts', 'Operations', 'Cash', 'HR', 'IT', 'Branch Support']));
+    $designationOptions = array_unique(array_merge(array_keys($designationPresets), ['Manager', 'Officer', 'Assistant', 'Cashier', 'Executive']));
 @endphp
 
 <div class="row g-4 align-items-start">
@@ -47,17 +49,19 @@
 
                     <div class="col-12">
                         <label class="form-label">Full Name</label>
-                        <input type="text" name="full_name" class="form-control" value="{{ old('full_name', $profile->full_name ?? '') }}" required>
+                        <input type="text" name="full_name" class="form-control" placeholder="Enter full name" value="{{ old('full_name', $profile->full_name ?? '') }}" required>
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Employee Code</label>
-                        <input type="text" name="employee_code" class="form-control" value="{{ old('employee_code', $profile->employee_code ?? '') }}" required>
+                        <input type="text" name="employee_code" class="form-control" placeholder="Auto-generated unique employee code" value="{{ old('employee_code', $profile->employee_code ?? $generatedEmployeeCode ?? '') }}" readonly>
+                        <small class="text-muted">This code is generated automatically when you save a new employee.</small>
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select" required>
+                            <option value="">Select status</option>
                             <option value="active" @selected(old('status', $profile->status ?? 'active') == 'active')>Active</option>
                             <option value="inactive" @selected(old('status', $profile->status ?? '') == 'inactive')>Inactive</option>
                         </select>
@@ -65,32 +69,42 @@
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email', $profile->email ?? '') }}">
+                        <input type="email" name="email" class="form-control" placeholder="Enter email address" value="{{ old('email', $profile->email ?? '') }}">
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Mobile</label>
-                        <input type="text" name="mobile" class="form-control" value="{{ old('mobile', $profile->mobile ?? '') }}">
+                        <input type="text" name="mobile" class="form-control" placeholder="Enter mobile number" value="{{ old('mobile', $profile->mobile ?? '') }}">
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Designation</label>
-                        <input type="text" name="designation" class="form-control" value="{{ old('designation', $profile->designation ?? '') }}">
+                        <select name="designation" class="form-select">
+                            <option value="">Select designation</option>
+                            @foreach($designationOptions as $designationOption)
+                                <option value="{{ $designationOption }}" @selected(old('designation', $profile->designation ?? '') == $designationOption)>{{ $designationOption }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Department</label>
-                        <input type="text" name="department" class="form-control" value="{{ old('department', $profile->department ?? '') }}">
+                        <select name="department" class="form-select">
+                            <option value="">Select department</option>
+                            @foreach($departmentOptions as $departmentOption)
+                                <option value="{{ $departmentOption }}" @selected(old('department', $profile->department ?? '') == $departmentOption)>{{ $departmentOption }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Join Date</label>
-                        <input type="date" name="joined_at" class="form-control" value="{{ old('joined_at', $profile->joined_at ?? '') }}">
+                        <input type="date" name="joined_at" class="form-control" placeholder="Select join date" value="{{ old('joined_at', $profile->joined_at ?? '') }}">
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Basic Salary</label>
-                        <input type="number" name="basic_salary" class="form-control" step="0.01" min="0" value="{{ old('basic_salary', $profile->basic_salary ?? 0) }}" required>
+                        <input type="number" name="basic_salary" class="form-control" step="0.01" min="0" placeholder="Enter basic salary" value="{{ old('basic_salary', $profile->basic_salary ?? 0) }}" required>
                     </div>
 
                     <div class="col-12">
@@ -145,7 +159,7 @@
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Payroll Month</label>
-                        <input type="month" name="payroll_month" class="form-control" value="{{ old('payroll_month', $selectedMonth) }}" required>
+                        <input type="month" name="payroll_month" class="form-control" placeholder="Select payroll month" value="{{ old('payroll_month', $selectedMonth) }}" required>
                     </div>
 
                     <div class="col-12">
@@ -168,6 +182,7 @@
                     <div class="col-12 col-md-6">
                         <label class="form-label">Payment Status</label>
                         <select name="payment_status" class="form-select" required>
+                            <option value="">Select payment status</option>
                             <option value="pending" @selected(old('payment_status', 'pending') == 'pending')>Pending</option>
                             <option value="paid" @selected(old('payment_status') == 'paid')>Paid</option>
                             <option value="hold" @selected(old('payment_status') == 'hold')>Hold</option>
@@ -176,36 +191,36 @@
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Allowance</label>
-                        <input type="number" name="allowance" class="form-control" step="0.01" min="0" value="{{ old('allowance', 0) }}">
+                        <input type="number" name="allowance" class="form-control" step="0.01" min="0" placeholder="Enter allowance" value="{{ old('allowance', 0) }}">
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label">Bonus</label>
-                        <input type="number" name="bonus" class="form-control" step="0.01" min="0" value="{{ old('bonus', 0) }}">
+                        <input type="number" name="bonus" class="form-control" step="0.01" min="0" placeholder="Enter bonus" value="{{ old('bonus', 0) }}">
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label">Overtime</label>
-                        <input type="number" name="overtime" class="form-control" step="0.01" min="0" value="{{ old('overtime', 0) }}">
+                        <input type="number" name="overtime" class="form-control" step="0.01" min="0" placeholder="Enter overtime amount" value="{{ old('overtime', 0) }}">
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label">Tax</label>
-                        <input type="number" name="tax" class="form-control" step="0.01" min="0" value="{{ old('tax', 0) }}">
+                        <input type="number" name="tax" class="form-control" step="0.01" min="0" placeholder="Enter tax amount" value="{{ old('tax', 0) }}">
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Deduction</label>
-                        <input type="number" name="deduction" class="form-control" step="0.01" min="0" value="{{ old('deduction', 0) }}">
+                        <input type="number" name="deduction" class="form-control" step="0.01" min="0" placeholder="Enter deduction" value="{{ old('deduction', 0) }}">
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Loan</label>
-                        <input type="number" name="loan" class="form-control" step="0.01" min="0" value="{{ old('loan', 0) }}">
+                        <input type="number" name="loan" class="form-control" step="0.01" min="0" placeholder="Enter loan amount" value="{{ old('loan', 0) }}">
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Other Deduction</label>
-                        <input type="number" name="other_deduction" class="form-control" step="0.01" min="0" value="{{ old('other_deduction', 0) }}">
+                        <input type="number" name="other_deduction" class="form-control" step="0.01" min="0" placeholder="Enter other deduction" value="{{ old('other_deduction', 0) }}">
                     </div>
 
                     <div class="col-12 col-md-6">
                         <label class="form-label">Payment Date</label>
-                        <input type="date" name="payment_date" class="form-control" value="{{ old('payment_date') }}">
+                        <input type="date" name="payment_date" class="form-control" placeholder="Select payment date" value="{{ old('payment_date') }}">
                     </div>
 
                     <div class="col-12">
@@ -246,11 +261,12 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label">Date</label>
-                        <input type="date" name="attendance_date" class="form-control" required>
+                        <input type="date" name="attendance_date" class="form-control" placeholder="Select attendance date" required>
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select" required>
+                            <option value="">Select attendance status</option>
                             <option value="present">Present</option>
                             <option value="late">Late</option>
                             <option value="absent">Absent</option>
@@ -259,11 +275,11 @@
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Check In</label>
-                        <input type="time" name="check_in_time" class="form-control">
+                        <input type="time" name="check_in_time" class="form-control" placeholder="Select check in time">
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Check Out</label>
-                        <input type="time" name="check_out_time" class="form-control">
+                        <input type="time" name="check_out_time" class="form-control" placeholder="Select check out time">
                     </div>
                     <div class="col-12">
                         <label class="form-label">Note</label>
