@@ -85,6 +85,7 @@
         border: 0.2mm solid #2f3742;
         padding: 0.2rem 0.5rem;
         font-size: 2.45mm;
+        font-weight: bold;
         line-height: 1;
         color: #111827;
         vertical-align: middle;
@@ -109,9 +110,9 @@
 
     .account-details-title {
         padding: 0.5rem 0.75rem;
-        background: #2f3742;
+        background: #0c673d;
         color: #ffffff;
-        font-weight: 700;
+        font-weight: 800;
         letter-spacing: 0.01em;
     }
 
@@ -119,7 +120,7 @@
         color: #1f2937;
         font-size: 2.3mm;
         line-height: 1.35;
-        margin-top: 0.6rem;
+        margin-top: 0.2rem;
     }
 
     .account-view-table th {
@@ -167,7 +168,7 @@
             min-height: 100vh !important;
             margin: 0 !important;
             display: grid !important;
-            justify-items: center !important;
+            justify-items: left !important;
             align-items: start !important;
             padding: 8mm 6mm 0 !important;
             box-sizing: border-box !important;
@@ -194,10 +195,16 @@
 
         #printArea .account-view-card {
             margin: 0 auto !important;
+            background: #ffffff !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
             page-break-before: avoid !important;
             page-break-after: avoid !important;
+        }
+
+        #printArea .account-details-title {
+            background: #ffffff !important;
+            color: #111827 !important;
         }
 
         #printArea .account-view-table {
@@ -309,11 +316,11 @@
                         <tbody>
                             <tr>
                                 <th>A/C Name</th>
-                                <td colspan="3">{{ $data->acName }}</td>
+                                <td colspan="3" style="font-size: 12px;">{{ $data->acName }}</td>
                             </tr>
                             <tr>
                                 <th>A/C Number</th>
-                                <td colspan="3">{{ $data->acNumber }}</td>
+                                <td colspan="3" style="font-size: 12px;">{{ $data->acNumber }}</td>
                             </tr>
                             <tr>
                                 <th width="20%">Account Type</th>
