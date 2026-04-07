@@ -1,0 +1,87 @@
+<?php
+
+return [
+    'salary_presets' => [
+        'departments' => [
+            'Accounts' => [
+                'allowance' => 4000,
+                'bonus' => 1500,
+                'overtime' => 500,
+                'tax' => 800,
+                'deduction' => 200,
+                'loan' => 0,
+                'other_deduction' => 0,
+            ],
+            'Operations' => [
+                'allowance' => 3500,
+                'bonus' => 1200,
+                'overtime' => 750,
+                'tax' => 700,
+                'deduction' => 150,
+                'loan' => 0,
+                'other_deduction' => 0,
+            ],
+            'Cash' => [
+                'allowance' => 2500,
+                'bonus' => 1000,
+                'overtime' => 300,
+                'tax' => 600,
+                'deduction' => 150,
+                'loan' => 0,
+                'other_deduction' => 0,
+            ],
+            'HR' => [
+                'allowance' => 4500,
+                'bonus' => 1800,
+                'overtime' => 0,
+                'tax' => 900,
+                'deduction' => 250,
+                'loan' => 0,
+                'other_deduction' => 0,
+            ],
+        ],
+        'designations' => [
+            'Manager' => [
+                'allowance' => 6000,
+                'bonus' => 2500,
+                'overtime' => 0,
+                'tax' => 1200,
+                'deduction' => 300,
+                'loan' => 0,
+                'other_deduction' => 0,
+            ],
+            'Officer' => [
+                'allowance' => 3500,
+                'bonus' => 1200,
+                'overtime' => 400,
+                'tax' => 700,
+                'deduction' => 200,
+                'loan' => 0,
+                'other_deduction' => 0,
+            ],
+            'Assistant' => [
+                'allowance' => 2200,
+                'bonus' => 800,
+                'overtime' => 200,
+                'tax' => 450,
+                'deduction' => 100,
+                'loan' => 0,
+                'other_deduction' => 0,
+            ],
+            'Cashier' => [
+                'allowance' => 2000,
+                'bonus' => 700,
+                'overtime' => 200,
+                'tax' => 400,
+                'deduction' => 100,
+                'loan' => 0,
+                'other_deduction' => 0,
+            ],
+        ],
+        'attendance' => [
+            'working_days' => 26,
+            'late_penalty_factor' => 0.25,
+            'leave_penalty_factor' => 0.5,
+        ],
+    ],
+];

@@ -1,19 +1,19 @@
 @extends('adminPanel.include')
-@section('calculasTitle') Employee Profile @endsection
+@section('calculasTitle') Admin Management @endsection
 @section('calculasBody')
 
 <div class="page-header">
     <div>
-        <div class="page-kicker">Employee Management</div>
-        <h1 class="page-title">Employee Profile</h1>
-        <p class="page-copy">Create and manage employee access with role-based permissions.</p>
+        <div class="page-kicker">Admin Management</div>
+        <h1 class="page-title">Admin User Profiles</h1>
+        <p class="page-copy">Create and manage admin login access with role-based permissions.</p>
     </div>
 </div>
 
 <div class="row align-items-center v-100">
     <div class="col-10 col-md-6 mx-auto my-4">
         <div class="card">
-            <div class="card-header">@if(isset($profile)) Update @else New @endif Employee</div>
+            <div class="card-header">@if(isset($profile)) Update @else New @endif Admin User</div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
@@ -51,11 +51,11 @@
                         <input type="hidden" name="employeeId" value="{{ $employee_id }}">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="employeeName"><i class="fa-thin fa-circle-user"></i></span>
-                            <input type="text" class="form-control" placeholder="Enter employee name" aria-label="employeeName" value="{{ $userName }}" name="employeeName" aria-describedby="employeeName">
+                            <input type="text" class="form-control" placeholder="Enter admin name" aria-label="employeeName" value="{{ $userName }}" name="employeeName" aria-describedby="employeeName">
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="employeeMail"><i class="fa-thin fa-envelope"></i></span>
-                            <input type="text" class="form-control" placeholder="Enter employee email" aria-label="employeeMail" value="{{ $email }}" name="employeeMail" aria-describedby="employeeMail" required>
+                            <input type="text" class="form-control" placeholder="Enter admin email" aria-label="employeeMail" value="{{ $email }}" name="employeeMail" aria-describedby="employeeMail" required>
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="loginId"><i class="fa-thin fa-lock"></i></span>
@@ -107,7 +107,7 @@
     <div class="col-10 mx-auto my-4">
         <div class="card">
             <div class="card-header">
-                <i class="fa-solid fa-people-group"></i> Employee List
+                    <i class="fa-solid fa-people-group"></i> Admin User List
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -167,7 +167,7 @@
                             <tr>
                                 <td colspan="6" class="text-center py-4">
                                     <div class="soft-muted">
-                                        <i class="fa-solid fa-inbox"></i> No employees found
+                                        <i class="fa-solid fa-inbox"></i> No admin users found
                                     </div>
                                 </td>
                             </tr>

@@ -38,8 +38,10 @@
                 <a class="app-nav-item" href="{{ route('acList') }}"><i class="fa-solid fa-users"></i><span>Account List</span></a>
                 <a class="app-nav-item" href="{{ route('debitCredit') }}"><i class="fa-solid fa-calculator"></i><span>Debit / Credit</span></a>
                 <a class="app-nav-item" href="{{ route('generateReport') }}"><i class="fa-solid fa-chart-column"></i><span>Generate Report</span></a>
+                <a class="app-nav-item" href="{{ route('projectBrochure') }}"><i class="fa-solid fa-book-open"></i><span>Brochure</span></a>
                 @if(Session::has('superAdmin') || Session::has('generalAdmin') || Session::has('manager'))
-                    <a class="app-nav-item" href="{{ route('bankEmployee') }}"><i class="fa-solid fa-user-tie"></i><span>Bank Employee</span></a>
+                    <a class="app-nav-item" href="{{ route('bankEmployee') }}"><i class="fa-solid fa-user-shield"></i><span>Admin Management</span></a>
+                    <a class="app-nav-item" href="{{ route('hrEmployeeIndex') }}"><i class="fa-solid fa-users-gear"></i><span>Employee & Payroll</span></a>
                     <a class="app-nav-item" href="{{ route('serverConfig') }}"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
                 @endif
             </nav>

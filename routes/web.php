@@ -7,6 +7,7 @@ use App\Http\Controllers\DebitCreditController;
 use App\Http\Controllers\CalculasController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ServerConfiguration;
+use App\Http\Controllers\EmployeePayrollController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,10 @@ Route::middleware(['superAdmin','manager','cashier','generalAdmin'])->group(func
         CalculasReportController::class,
         'generateReport'
     ])->name('generateReport');
+
+    Route::get('/project/brochure', function () {
+        return view('adminPanel.brochure');
+    })->name('projectBrochure');
 
     Route::post('/generateReport/getData',[
         CalculasReportController::class,
@@ -219,4 +224,55 @@ Route::middleware(['superAdmin','manager','generalAdmin'])->group(function(){
         CalculasController::class,
         'employeeRegister'
     ])->name('createEmployee');
+
+    // employee system and payroll routes
+    Route::get('/hr/employees', [
+        EmployeePayrollController::class,
+        'index'
+    ])->name('hrEmployeeIndex');
+
+    Route::get('/hr/employees/edit/{id}', [
+        EmployeePayrollController::class,
+        'edit'
+    ])->name('hrEmployeeEdit');
+
+    Route::post('/hr/employees/save', [
+        EmployeePayrollController::class,
+        'saveEmployee'
+    ])->name('hrEmployeeSave');
+
+    Route::get('/hr/employees/delete/{id}', [
+        EmployeePayrollController::class,
+        'deleteEmployee'
+    ])->name('hrEmployeeDelete');
+
+    Route::post('/hr/payroll/save', [
+        EmployeePayrollController::class,
+        'savePayroll'
+    ])->name('hrPayrollSave');
+
+    Route::get('/hr/payroll/pdf/{id}', [
+        EmployeePayrollController::class,
+        'downloadPayrollPdf'
+    ])->name('hrPayrollPdf');
+
+    Route::get('/hr/payroll/delete/{id}', [
+        EmployeePayrollController::class,
+        'deletePayroll'
+    ])->name('hrPayrollDelete');
+
+    Route::post('/hr/attendance/save', [
+        EmployeePayrollController::class,
+        'saveAttendance'
+    ])->name('hrAttendanceSave');
+
+    Route::get('/hr/attendance/delete/{id}', [
+        EmployeePayrollController::class,
+        'deleteAttendance'
+    ])->name('hrAttendanceDelete');
+
+    Route::get('/hr/payroll/slip/{id}', [
+        EmployeePayrollController::class,
+        'payrollSlip'
+    ])->name('hrPayrollSlip');
 });
