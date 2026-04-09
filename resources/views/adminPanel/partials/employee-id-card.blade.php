@@ -53,6 +53,14 @@
         <div class="idm-back-content">
             <h6>Terms and Conditions</h6>
             <p>This card is organizational property. Carry it during office hours and present on request. Return immediately upon resignation or transfer.</p>
+            
+            <div class="idm-qrcode">
+                @if(!empty($card['qrCodeSvg']))
+                    <img src="{{ $card['qrCodeSvg'] }}" alt="Employee QR Code">
+                @else
+                    <span>{{ $card['studentId'] }}</span>
+                @endif
+            </div>
 
             <div class="idm-company">
                 <div><strong>{{ $branding['name'] ?? 'Company Name' }}</strong></div>
@@ -63,13 +71,6 @@
 
             <div class="idm-sign">
                 <span>Authorized Signature</span>
-            </div>
-            <div class="idm-qrcode">
-                @if(!empty($card['qrCodeSvg']))
-                    <img src="{{ $card['qrCodeSvg'] }}" alt="Employee QR Code">
-                @else
-                    <span>{{ $card['studentId'] }}</span>
-                @endif
             </div>
         </div>
 
