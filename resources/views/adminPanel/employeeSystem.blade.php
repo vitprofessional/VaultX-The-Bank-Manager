@@ -330,6 +330,9 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <a href="{{ route('hrEmployeeIdCardPreview', ['id' => $emp->id]) }}" class="btn btn-sm btn-info text-white" title="Preview ID Card">
+                                            <i class="fa-solid fa-id-card"></i>
+                                        </a>
                                         <a href="{{ route('hrEmployeeEdit', ['id' => $emp->id, 'month' => $selectedMonth]) }}" class="btn btn-sm btn-success text-white" title="Edit Employee">
                                             <i class="fa-solid fa-file-pen"></i>
                                         </a>

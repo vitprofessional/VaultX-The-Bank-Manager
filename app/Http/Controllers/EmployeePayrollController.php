@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BankEmployee;
 use App\Models\Payroll;
+use App\Models\ServerConfig;
 use App\Models\StaffAttendance;
 use App\Models\StaffEmployee;
 use Illuminate\Http\Request;
@@ -255,6 +256,38 @@ class EmployeePayrollController extends Controller
         return $pdf->download('payroll-slip-' . $payroll->id . '.pdf');
     }
 
+    public function employeeIdCard($id, Request $request)
+    {
+        $employee = StaffEmployee::findOrFail($id);
+        $format = $this->resolveCardFormat($request->get('format', 'landscape'));
+
+        [$card, $branding] = $this->buildEmployeeCardViewData($employee);
+
+        return view('adminPanel.employeeIdCardPreview', [
+            'employee' => $employee,
+            'card' => $card,
+            'branding' => $branding,
+            'format' => $format,
+        ]);
+    }
+
+    public function downloadEmployeeIdCardPdf($id, Request $request)
+    {
+        $employee = StaffEmployee::findOrFail($id);
+        $format = $this->resolveCardFormat($request->get('format', 'landscape'));
+
+        [$card, $branding] = $this->buildEmployeeCardViewData($employee);
+
+        $pdf = Pdf::loadView('adminPanel.employeeIdCardPdf', [
+            'employee' => $employee,
+            'card' => $card,
+            'branding' => $branding,
+            'format' => $format,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download('employee-id-card-' . $employee->employee_code . '.pdf');
+    }
+
     private function currentAdminId(): ?int
     {
         if (Session::has('superAdmin')) {
@@ -362,5 +395,94 @@ class EmployeePayrollController extends Controller
             'absent_days' => $records->where('status', 'absent')->count(),
             'leave_days' => $records->where('status', 'leave')->count(),
         ];
+    }
+
+    private function buildEmployeeCardViewData(StaffEmployee $employee): array
+    {
+        $server = $this->activeServerConfig();
+        $joinedAt = $employee->joined_at
+            ? \Carbon\Carbon::parse($employee->joined_at)->format('d M Y')
+            : 'N/A';
+
+        $validity = \Carbon\Carbon::now()->endOfYear()->format('d M Y');
+        $issueDate = \Carbon\Carbon::now()->format('d M Y');
+
+        $bankName       = $server->bank_name ?? 'Bank Manager';
+        $companyName    = $server->business_name ?? "Virtual IT Professional";
+        $companyLocation= $server->location ?? "Burichong Bazar, Burichong, Cumilla";
+        $outletBranch   = "Burichong Bazar Outlet, Burichong, Cumilla";
+        $logoName = $server->bank_logo ?? null;
+
+        $initials = collect(explode(' ', trim((string) $employee->full_name)))
+            ->filter()
+            ->map(function ($part) {
+                return strtoupper(substr($part, 0, 1));
+            })
+            ->take(2)
+            ->implode('');
+
+        if ($initials === '') {
+            $initials = 'EM';
+        }
+
+        $avatarSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="360">'
+            . '<rect width="100%" height="100%" fill="#e2e8f0"/>'
+            . '<text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="88" fill="#0f172a" font-weight="700">'
+            . $initials
+            . '</text></svg>';
+
+        $card = [
+            'name' => $employee->full_name,
+            'studentId' => $employee->employee_code,
+            'class' => $employee->department ?: 'General',
+            'section' => $employee->designation ?: 'Employee',
+            'roll' => ucfirst($employee->status ?: 'active'),
+            'guardianName' => $employee->email ?: 'N/A',
+            'guardianPhone' => $employee->mobile ?: 'N/A',
+            'guardianRelation' => 'Contact',
+            'validity' => $validity,
+            'issueDate' => $issueDate,
+            'joinedAt' => $joinedAt,
+            'photoUrl' => 'data:image/svg+xml;base64,' . base64_encode($avatarSvg),
+        ];
+
+        $branding = [
+            'name' => $bankName,
+            'company' => $companyName,
+            'outlet' => $outletBranch,
+            'tagline' => !empty($server->linked_branch)
+                ? 'Branch: ' . $server->linked_branch
+                : 'Employee Identity Card',
+            'phone' => $server->contact_number ?? $server->helpline ?? 'N/A',
+            'email' => $server->email ?? 'N/A',
+            'website' => request()->getHost(),
+            'location' => $server->location ?: 'N/A',
+            'address' => trim(($server->location ?? '') . ', ' . ($server->district ?? '')),
+            'logoUrl' => $logoName ? asset('upload/logos/' . $logoName) : null,
+        ];
+
+        return [$card, $branding];
+    }
+
+    private function activeServerConfig(): ServerConfig
+    {
+        $adminId = $this->currentAdminId();
+        $server = null;
+
+        if (!empty($adminId)) {
+            $admin = BankEmployee::find($adminId);
+            $creator = $admin?->creator;
+
+            $server = ServerConfig::where('employee_id', $adminId)
+                ->orWhere('employee_id', $creator)
+                ->first();
+        }
+
+        return $server ?: (ServerConfig::first() ?: new ServerConfig());
+    }
+
+    private function resolveCardFormat(string $format): string
+    {
+        return in_array($format, ['landscape', 'portrait'], true) ? $format : 'landscape';
     }
 }

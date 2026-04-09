@@ -246,6 +246,16 @@ Route::middleware(['superAdmin','manager','generalAdmin'])->group(function(){
         'deleteEmployee'
     ])->name('hrEmployeeDelete');
 
+    Route::get('/hr/employees/id-card/{id}', [
+        EmployeePayrollController::class,
+        'employeeIdCard'
+    ])->name('hrEmployeeIdCardPreview');
+
+    Route::get('/hr/employees/id-card/pdf/{id}', [
+        EmployeePayrollController::class,
+        'downloadEmployeeIdCardPdf'
+    ])->name('hrEmployeeIdCardPdf');
+
     Route::post('/hr/payroll/save', [
         EmployeePayrollController::class,
         'savePayroll'

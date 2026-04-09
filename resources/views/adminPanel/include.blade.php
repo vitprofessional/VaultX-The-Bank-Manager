@@ -8,6 +8,7 @@
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/32dcd4a478.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('public/css/calculas.css') }}">
+        @stack('styles')
   </head>
   <body class="calculas-app">
     <div class="app-shell">
@@ -112,5 +113,6 @@
             });
         });
     </script>
+        @stack('scripts')
   </body>
 </html>
