@@ -16,6 +16,13 @@
 
         <div class="idm-content">
             <div class="idm-brand">
+                <div class="idm-brand-mark">
+                    @if(!empty($branding['logoUrl']))
+                        <img src="{{ $branding['logoUrl'] }}" alt="Logo">
+                    @else
+                        <span>{{ strtoupper(substr($branding['name'] ?? 'B', 0, 1)) }}</span>
+                    @endif
+                </div>
                 <div class="idm-brand-copy">
                     <h5>{{ $branding['name'] ?? 'Brand Name' }}</h5>
                     <p>{{ $branding['outlet'] ?? 'Tagline Space' }}</p>

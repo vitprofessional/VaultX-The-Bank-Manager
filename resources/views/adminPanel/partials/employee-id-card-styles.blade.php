@@ -15,9 +15,9 @@
 }
 
 .idm-card-sheet {
-    width: 380px;
+    width: 12cm;
     display: flex;
-    gap: 24px;
+    gap: 0.6cm;
     justify-content: center;
     flex-wrap: wrap;
     margin: 0 auto;
@@ -25,8 +25,8 @@
 }
 
 .idm-card {
-    width: 176px;
-    height: 282px;
+    width: 5.5cm;
+    height: 8.5cm;
     background: #fff;
     border-radius: 12px;
     border: 1px solid #dadada;
@@ -160,7 +160,7 @@
     justify-content: space-between;
     gap: 6px;
     border-bottom: 1px solid #ececec;
-    padding: 1px 0;
+    padding: 4.5px 0;
 }
 
 .idm-contact span {
@@ -280,18 +280,18 @@
 .idm-geo-shape .s1 {
     left: 0;
     border-bottom: 54px solid #ff6a2d;
-    border-right: 176px solid transparent;
+    border-right: 5.5cm solid transparent;
 }
 
 .idm-geo-shape .s2 {
     right: 0;
     border-bottom: 40px solid #f04a1d;
-    border-left: 132px solid transparent;
+    border-left: 4.2cm solid transparent;
 }
 
 .idm-geo-shape .s3 {
     right: 0;
     border-bottom: 26px solid #dd3a16;
-    border-left: 86px solid transparent;
+    border-left: 2.8cm solid transparent;
 }
 

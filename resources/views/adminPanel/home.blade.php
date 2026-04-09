@@ -29,7 +29,29 @@
 
     @php
         $dateToday = date('Y-m-d');
-        $data = \App\Models\BankCapital::whereDate('created_at', $dateToday)->where('employee_id', $employee_id)->first();
+        $cashierIds = [];
+        $cashiers = collect();
+        $selectedCashierId = null;
+        if(Session::has('superAdmin')) {
+            $cashiers = \App\Models\BankEmployee::where('profileType', 4)->orderBy('name')->get(['id', 'name']);
+            $cashierIds = $cashiers->pluck('id')->toArray();
+            $selectedCashierId = (int) request()->get('cashierId', !empty($cashierIds) ? $cashierIds[0] : 0);
+            if (!in_array($selectedCashierId, $cashierIds, true)) {
+                $selectedCashierId = !empty($cashierIds) ? $cashierIds[0] : null;
+            }
+            $data = \App\Models\BankCapital::whereDate('created_at', $dateToday)
+                ->where('employee_id', $selectedCashierId)
+                ->orderBy('id', 'desc')
+                ->first();
+        } else {
+            $data = \App\Models\BankCapital::whereDate('created_at', $dateToday)
+                ->where('employee_id', $employee_id)
+                ->first();
+        }
+
+        $entryEmployeeId = isset($data)
+            ? $data->employee_id
+            : (!empty($selectedCashierId) ? $selectedCashierId : $employee_id);
 
         if(isset($data)):
             $liquid = $data->ob;
@@ -52,6 +74,22 @@
                     <span class="badge bg-light text-dark rounded-pill">{{ $today }}</span>
                 </div>
                 <div class="card-body">
+                    @if(Session::has('superAdmin'))
+                        <form method="GET" action="{{ route('home') }}" class="row g-2 align-items-end mb-4">
+                            <div class="col-12 col-md-8">
+                                <label class="form-label">Cashier</label>
+                                <select name="cashierId" class="form-select" onchange="this.form.submit()">
+                                    @foreach($cashiers as $cashier)
+                                        <option value="{{ $cashier->id }}" @selected((int) $selectedCashierId === (int) $cashier->id)>{{ $cashier->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-outline-primary w-100">Load Cashier Data</button>
+                            </div>
+                        </form>
+                    @endif
+
                     @if(isset($capitalId))
                         <div class="mb-4 p-3 rounded-4" style="background: var(--accent-soft); border: 1px solid rgba(11,122,117,.12);">
                             <div class="fw-semibold text-uppercase small text-success"><i class="fa-solid fa-edit"></i> Editing existing record</div>
@@ -133,7 +171,7 @@
                             </div>
                             <form class="row g-3" method="POST" action="{{ route('saveCalculas') }}">
                                 @csrf
-                                <input type="hidden" name="employeeId" value="{{ $employee_id }}">
+                                <input type="hidden" name="employeeId" value="{{ $entryEmployeeId }}">
                                 <div class="col-12 col-md-6">
                                     <label for="liquid" class="form-label">Liquid Balance</label>
                                     <div class="input-group">

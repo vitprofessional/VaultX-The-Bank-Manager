@@ -201,7 +201,23 @@
             
             <form class="row g-3 card-body" method="POST" action="{{ route('getData') }}">
                 @csrf
-                <input type="hidden" name="employeeId" value="{{ $employee_id }}">
+                @if(Session::has('superAdmin'))
+                    @php
+                        $cashiers = \App\Models\BankEmployee::where('profileType', 4)->orderBy('name')->get(['id', 'name']);
+                        $selectedCashierId = old('employeeId', request()->get('cashierId', optional($cashiers->first())->id));
+                    @endphp
+                    <div class="col-12">
+                        <label for="employeeId" class="form-label">Cashier</label>
+                        <select id="employeeId" name="employeeId" class="form-select" required>
+                            <option value="">Select cashier</option>
+                            @foreach($cashiers as $cashier)
+                                <option value="{{ $cashier->id }}" @selected((int) $selectedCashierId === (int) $cashier->id)>{{ $cashier->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @else
+                    <input type="hidden" name="employeeId" value="{{ $employee_id }}">
+                @endif
                 <div class="col-12">
                     <label for="reportDate" class="form-label">Date</label>
                     <input type="date" class="form-control" name="reportDate" id="reportDate" placeholder="Enter the date of your query" required />

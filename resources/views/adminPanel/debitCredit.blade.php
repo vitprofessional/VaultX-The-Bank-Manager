@@ -33,6 +33,18 @@
                 </div>
                 <div class="card-body">
                     @php
+                        $cashierIds = [];
+                        $cashiers = collect();
+                        $selectedCashierId = null;
+                        if(Session::has('superAdmin')) {
+                            $cashiers = \App\Models\BankEmployee::where('profileType', 4)->orderBy('name')->get(['id', 'name']);
+                            $cashierIds = $cashiers->pluck('id')->toArray();
+                            $selectedCashierId = (int) request()->get('cashierId', !empty($cashierIds) ? $cashierIds[0] : 0);
+                            if (!in_array($selectedCashierId, $cashierIds, true)) {
+                                $selectedCashierId = !empty($cashierIds) ? $cashierIds[0] : null;
+                            }
+                        }
+
                         if(isset($data)):
                             $amount = $data->amount;
                             $details = $data->details;
@@ -44,11 +56,30 @@
                             $txnType = '';
                             $dcId = '';
                         endif;
+
+                        $entryEmployeeId = isset($data)
+                            ? $data->employee_id
+                            : (!empty($selectedCashierId) ? $selectedCashierId : $employee_id);
                     @endphp
+                    @if(Session::has('superAdmin'))
+                        <form method="GET" action="{{ route('debitCredit') }}" class="row g-2 align-items-end mb-4">
+                            <div class="col-12 col-md-8">
+                                <label class="form-label">Cashier</label>
+                                <select name="cashierId" class="form-select" onchange="this.form.submit()">
+                                    @foreach($cashiers as $cashier)
+                                        <option value="{{ $cashier->id }}" @selected((int) $selectedCashierId === (int) $cashier->id)>{{ $cashier->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-outline-primary w-100">Load Cashier Data</button>
+                            </div>
+                        </form>
+                    @endif
                     <form class="row g-3" method="POST" action="{{ route('saveDebitCredit') }}">
                         @csrf
                         <input type="hidden" value="{{ $dcId }}" name="dcId">
-                        <input type="hidden" name="employeeId" value="{{ $employee_id }}">
+                        <input type="hidden" name="employeeId" value="{{ $entryEmployeeId }}">
                         
                         <div class="col-12">
                             <label for="amount" class="form-label">Transaction Amount</label>
@@ -82,7 +113,7 @@
                         <div class="col-12 d-flex gap-2">
                             <button type="submit" class="btn btn-brand text-white"><i class="fa-solid fa-save"></i> Save Transaction</button>
                             @if(!empty($dcId))
-                                <a href="{{ route('home') }}" class="btn btn-outline-secondary">Cancel</a>
+                                <a href="{{ route('debitCredit', ['cashierId' => $selectedCashierId]) }}" class="btn btn-outline-secondary">Cancel</a>
                             @endif
                         </div>
                     </form>
@@ -110,7 +141,17 @@
                             <tbody>
                                 @php
                                     $today = date('Y-m-d');
-                                    $data = \App\Models\DebitCredit::whereDate('created_at',$today)->where(['employee_id'=>$employee_id])->orderBy('id','DESC')->get();
+                                    if(Session::has('superAdmin')) {
+                                        $data = \App\Models\DebitCredit::whereDate('created_at', $today)
+                                            ->where('employee_id', $selectedCashierId)
+                                            ->orderBy('id', 'DESC')
+                                            ->get();
+                                    } else {
+                                        $data = \App\Models\DebitCredit::whereDate('created_at', $today)
+                                            ->where(['employee_id' => $employee_id])
+                                            ->orderBy('id', 'DESC')
+                                            ->get();
+                                    }
                                     $x = 1;
                                 @endphp
                                 @if(isset($data) && count($data)>0)

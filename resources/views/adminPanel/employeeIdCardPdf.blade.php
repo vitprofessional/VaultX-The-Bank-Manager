@@ -22,7 +22,7 @@
 
         /* DOMPDF-safe layout fallback: avoid flex dependency */
         .idm-card-sheet {
-            width: 380px;
+            width: 12cm;
             margin: 0 auto;
             text-align: center;
             font-size: 0;

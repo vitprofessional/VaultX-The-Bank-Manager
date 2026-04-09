@@ -23,6 +23,14 @@ class CalculasReportController extends Controller
         if($currentAdmin && $currentAdmin->profileType == 1) {
             // Super admin - allow access to requested employee's records
             $employee_id = $requestedEmployeeId;
+            if (empty($employee_id)) {
+                return back()->with('error', 'Please select a cashier to generate report.');
+            }
+
+            $isCashier = BankEmployee::where('id', $employee_id)->where('profileType', 4)->exists();
+            if (!$isCashier) {
+                return back()->with('error', 'Invalid cashier selected for report generation.');
+            }
         } else {
             // Other roles - restrict to their own records
             $employee_id = $currentAdminId;
@@ -33,9 +41,16 @@ class CalculasReportController extends Controller
         
         $data   = BankCapital::whereDate('created_at',$dateToday)->where(['employee_id'=>$employee_id])->first();
 
-        $debit  = DebitCredit::whereDate('created_at',$dateToday)->where(['employee_id'=>$employee_id])->where(['txnType'=>'Debit','employee_id'=>$employee_id])->orderBy('id','DESC')->get();
+        $debit  = DebitCredit::whereDate('created_at',$dateToday)
+            ->where(['employee_id'=>$employee_id])
+            ->where(['txnType'=>'Debit'])
+            ->orderBy('id','DESC')
+            ->get();
 
-        $credit = DebitCredit::whereDate('created_at',$dateToday)->where(['txnType'=>'Credit','employee_id'=>$employee_id])->orderBy('id','DESC')->get();
+        $credit = DebitCredit::whereDate('created_at',$dateToday)
+            ->where(['txnType'=>'Credit','employee_id'=>$employee_id])
+            ->orderBy('id','DESC')
+            ->get();
 
         $creditTotal    = $credit->sum('amount');
         $debitTotal     = $debit->sum('amount');

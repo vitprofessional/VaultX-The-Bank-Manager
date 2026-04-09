@@ -74,7 +74,7 @@ function printCards() {
                 html, body { margin: 0; padding: 0; background: #fff; }
                 .print-wrap { width: 100%; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 12mm 0; }
                 .idm-card { box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12); }
-                @page { size: A4 {{ $fmt }}; margin: 12mm; }
+                @page { size: A4 {{ $fmt }}; margin: 5mm; }
             </style>
         </head>
         <body>

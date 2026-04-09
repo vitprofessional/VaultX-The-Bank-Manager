@@ -674,7 +674,7 @@ class EmployeePayrollController extends Controller
             'website' => request()->getHost(),
             'location' => $server->location ?: 'N/A',
             'address' => trim(($server->location ?? '') . ', ' . ($server->district ?? '')),
-            'logoUrl' => $logoName ? asset('upload/logos/' . $logoName) : null,
+            'logoUrl' => $logoName ? asset('public/upload/logos/' . $logoName) : null,
         ];
 
         return [$card, $branding];
