@@ -43,9 +43,24 @@
                 <i class="fa-solid fa-id-card me-2"></i>@if(isset($profile)) Update @else New @endif Employee Profile
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('hrEmployeeSave') }}" class="row g-3">
+                <form method="POST" action="{{ route('hrEmployeeSave') }}" class="row g-3" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="employee_profile_id" value="{{ $profile->id ?? '' }}">
+
+                    @if(isset($profile) && !empty($profile->avatar_path) && file_exists(public_path($profile->avatar_path)))
+                        <div class="col-12">
+                            <label class="form-label">Current Avatar</label>
+                            <div>
+                                <img src="{{ asset('public/'.$profile->avatar_path) }}" alt="Employee Avatar" style="width:72px;height:72px;object-fit:cover;border-radius:50%;border:2px solid #e5e7eb;">
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="col-12">
+                        <label class="form-label">Avatar (JPG, PNG, WEBP | Max 2MB)</label>
+                        <input type="file" name="avatar" class="form-control" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                        <small class="text-muted">Upload employee profile photo for ID card and profile view.</small>
+                    </div>
 
                     <div class="col-12">
                         <label class="form-label">Full Name</label>
@@ -55,7 +70,7 @@
                     <div class="col-12 col-md-6">
                         <label class="form-label">Employee Code</label>
                         <input type="text" name="employee_code" class="form-control" placeholder="Auto-generated unique employee code" value="{{ old('employee_code', $profile->employee_code ?? $generatedEmployeeCode ?? '') }}" readonly>
-                        <small class="text-muted">This code is generated automatically when you save a new employee.</small>
+                        <small class="text-muted">This code is generated in the form and saved as-is. It cannot be edited here.</small>
                     </div>
 
                     <div class="col-12 col-md-6">
@@ -106,6 +121,26 @@
                         <label class="form-label">Basic Salary</label>
                         <input type="number" name="basic_salary" class="form-control" step="0.01" min="0" placeholder="Enter basic salary" value="{{ old('basic_salary', $profile->basic_salary ?? 0) }}" required>
                     </div>
+
+                    @if(Session::has('superAdmin'))
+                        <div class="col-12">
+                            <div class="border rounded-3 p-3 bg-light-subtle">
+                                <div class="fw-semibold mb-2"><i class="fa-solid fa-shield-halved me-1"></i> Staff Access Control</div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="canLogin" name="can_login" value="1" @checked(old('can_login', $profile->can_login ?? false))>
+                                    <label class="form-check-label" for="canLogin">Enable employee login access</label>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="attendanceAccess" name="attendance_access" value="1" @checked(old('attendance_access', $profile->attendance_access ?? false))>
+                                    <label class="form-check-label" for="attendanceAccess">Allow employee self attendance</label>
+                                </div>
+
+                                <label class="form-label">Login Password @if(isset($profile) && !empty($profile->login_password)) (optional to change) @endif</label>
+                                <input type="password" name="login_password" class="form-control" placeholder="Set staff login password">
+                                <small class="text-muted">Required when login access is enabled for first-time setup.</small>
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="col-12">
                         <label class="form-label">Salary Preset</label>
@@ -245,50 +280,54 @@
 
         <div class="card mt-4">
             <div class="card-header">
-                <i class="fa-solid fa-calendar-check me-2"></i>Attendance Entry
+                <i class="fa-solid fa-calendar-check me-2"></i>@if(isset($attendanceProfile)) Update @else Attendance @endif Entry
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('hrAttendanceSave') }}" class="row g-3">
                     @csrf
+                    <input type="hidden" name="attendance_id" value="{{ $attendanceProfile->id ?? '' }}">
                     <div class="col-12 col-md-6">
                         <label class="form-label">Employee</label>
                         <select name="staff_employee_id" class="form-select" required>
                             <option value="">Select employee</option>
                             @foreach($employees as $emp)
-                                <option value="{{ $emp->id }}">{{ $emp->full_name }} ({{ $emp->employee_code }})</option>
+                                <option value="{{ $emp->id }}" @selected(old('staff_employee_id', $attendanceProfile->staff_employee_id ?? '') == $emp->id)>{{ $emp->full_name }} ({{ $emp->employee_code }})</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label">Date</label>
-                        <input type="date" name="attendance_date" class="form-control" placeholder="Select attendance date" required>
+                        <input type="date" name="attendance_date" class="form-control" placeholder="Select attendance date" value="{{ old('attendance_date', $attendanceProfile->attendance_date ?? '') }}" required>
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select" required>
                             <option value="">Select attendance status</option>
-                            <option value="present">Present</option>
-                            <option value="late">Late</option>
-                            <option value="absent">Absent</option>
-                            <option value="leave">Leave</option>
+                            <option value="present" @selected(old('status', $attendanceProfile->status ?? '') == 'present')>Present</option>
+                            <option value="late" @selected(old('status', $attendanceProfile->status ?? '') == 'late')>Late</option>
+                            <option value="absent" @selected(old('status', $attendanceProfile->status ?? '') == 'absent')>Absent</option>
+                            <option value="leave" @selected(old('status', $attendanceProfile->status ?? '') == 'leave')>Leave</option>
                         </select>
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Check In</label>
-                        <input type="time" name="check_in_time" class="form-control" placeholder="Select check in time">
+                        <input type="time" name="check_in_time" class="form-control" placeholder="Select check in time" value="{{ old('check_in_time', $attendanceProfile->check_in_time ?? '') }}">
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label">Check Out</label>
-                        <input type="time" name="check_out_time" class="form-control" placeholder="Select check out time">
+                        <input type="time" name="check_out_time" class="form-control" placeholder="Select check out time" value="{{ old('check_out_time', $attendanceProfile->check_out_time ?? '') }}">
                     </div>
                     <div class="col-12">
                         <label class="form-label">Note</label>
-                        <textarea name="note" class="form-control" rows="2" placeholder="Optional attendance note"></textarea>
+                        <textarea name="note" class="form-control" rows="2" placeholder="Optional attendance note">{{ old('note', $attendanceProfile->note ?? '') }}</textarea>
                     </div>
                     <div class="col-12">
                         <button type="submit" class="btn btn-outline-primary">
-                            <i class="fa-solid fa-calendar-plus"></i> Save Attendance
+                            <i class="fa-solid @if(isset($attendanceProfile)) fa-pen-to-square @else fa-calendar-plus @endif"></i> @if(isset($attendanceProfile)) Update Attendance @else Save Attendance @endif
                         </button>
+                        @if(isset($attendanceProfile))
+                            <a href="{{ route('hrEmployeeIndex', ['month' => $selectedMonth]) }}" class="btn btn-outline-secondary ms-2">Cancel Edit</a>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -306,6 +345,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Avatar</th>
                                 <th>Name</th>
                                 <th>Code</th>
                                 <th>Department</th>
@@ -318,6 +358,15 @@
                             @forelse($employees as $index => $emp)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
+                                    <td>
+                                        @if(!empty($emp->avatar_path) && file_exists(public_path($emp->avatar_path)))
+                                            <img src="{{ asset('public/'.$emp->avatar_path) }}" alt="{{ $emp->full_name }}" style="width:36px;height:36px;object-fit:cover;border-radius:50%;border:1px solid #e5e7eb;">
+                                        @else
+                                            <span class="badge rounded-pill text-bg-light" style="width:36px;height:36px;line-height:30px;font-weight:700;">
+                                                {{ strtoupper(substr(trim((string) $emp->full_name), 0, 1)) }}
+                                            </span>
+                                        @endif
+                                    </td>
                                     <td>{{ $emp->full_name }}</td>
                                     <td><code>{{ $emp->employee_code }}</code></td>
                                     <td>{{ $emp->department ?: '-' }}</td>
@@ -336,6 +385,14 @@
                                         <a href="{{ route('hrEmployeeEdit', ['id' => $emp->id, 'month' => $selectedMonth]) }}" class="btn btn-sm btn-success text-white" title="Edit Employee">
                                             <i class="fa-solid fa-file-pen"></i>
                                         </a>
+                                        @if(Session::has('superAdmin'))
+                                            <form method="POST" action="{{ route('hrEmployeeDeviceReset', ['id' => $emp->id]) }}" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-warning text-dark" onclick="return confirm('Reset bound device for this employee? They will need to login again from a new PC to bind.');" title="Reset Device Binding">
+                                                    <i class="fa-solid fa-laptop-medical"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                         <a href="{{ route('hrEmployeeDelete', ['id' => $emp->id]) }}" onclick="return confirm('Delete this employee profile? All payroll records of this employee will be removed.');" class="btn btn-sm btn-danger" title="Delete Employee">
                                             <i class="fa-solid fa-trash"></i>
                                         </a>
@@ -343,6 +400,7 @@
                                 </tr>
                             @empty
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -440,6 +498,8 @@
                                 <th>Status</th>
                                 <th>Check In</th>
                                 <th>Check Out</th>
+                                <th>Edited By</th>
+                                <th>Last Updated</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -452,7 +512,12 @@
                                     <td class="text-capitalize">{{ $attendance->status }}</td>
                                     <td>{{ $attendance->check_in_time ?: '-' }}</td>
                                     <td>{{ $attendance->check_out_time ?: '-' }}</td>
+                                    <td>{{ $attendanceMarkedByMap[$attendance->marked_by] ?? 'N/A' }}</td>
+                                    <td>{{ optional($attendance->updated_at)->format('d M Y H:i') ?: '-' }}</td>
                                     <td>
+                                        <a href="{{ route('hrAttendanceEdit', ['id' => $attendance->id, 'month' => $selectedMonth]) }}" class="btn btn-sm btn-success text-white" title="Edit Attendance">
+                                            <i class="fa-solid fa-file-pen"></i>
+                                        </a>
                                         <a href="{{ route('hrAttendanceDelete', ['id' => $attendance->id]) }}" onclick="return confirm('Delete this attendance record?');" class="btn btn-sm btn-danger" title="Delete Attendance">
                                             <i class="fa-solid fa-trash"></i>
                                         </a>
@@ -460,6 +525,8 @@
                                 </tr>
                             @empty
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

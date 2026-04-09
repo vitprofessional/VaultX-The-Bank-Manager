@@ -2,7 +2,7 @@
 @section('calculasTitle') Debit/Credit @endsection
 @section('calculasBody')
 
-@if(Session::has('cashier'))
+@if(Session::has('cashier') || Session::has('superAdmin'))
     <div class="page-header">
         <div>
             <div class="page-kicker">Cash Transactions</div>

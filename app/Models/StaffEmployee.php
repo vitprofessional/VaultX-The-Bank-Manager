@@ -9,6 +9,12 @@ class StaffEmployee extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'can_login' => 'boolean',
+        'attendance_access' => 'boolean',
+        'device_bound_at' => 'datetime',
+    ];
+
     public function payrolls(): HasMany
     {
         return $this->hasMany(Payroll::class);

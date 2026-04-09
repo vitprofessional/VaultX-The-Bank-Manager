@@ -5,9 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Session;
 
-class Manager
+class StaffEmployeeAuth
 {
     /**
      * Handle an incoming request.
@@ -16,11 +15,10 @@ class Manager
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Session::has('superAdmin') || Session::has('manager')):
-            $x = "";
-        else:
-            return redirect(route('calculasLogin'))->with('error','Please login to continue');
-        endif;
+        if (!session()->has('staffEmployee')) {
+            return redirect()->route('staffLogin')->with('error', 'Please login to continue.');
+        }
+
         return $next($request);
     }
 }

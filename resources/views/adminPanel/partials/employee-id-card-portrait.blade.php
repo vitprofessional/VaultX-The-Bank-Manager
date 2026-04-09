@@ -5,7 +5,7 @@
     $companyPhone = $branding['phone'] ?? 'N/A';
     $companyEmail = $branding['email'] ?? 'N/A';
     $companyWebsite = $branding['website'] ?? 'company.com';
-    $companyLocation = $branding['address'] ?? ($branding['location'] ?? 'N/A');
+    $companyLocation = $branding['outlet'] ?? ($branding['location'] ?? 'N/A');
 @endphp
 
 <div class="idm-card-sheet">
@@ -16,16 +16,9 @@
 
         <div class="idm-content">
             <div class="idm-brand">
-                <div class="idm-brand-mark">
-                    @if(!empty($branding['logoUrl']))
-                        <img src="{{ $branding['logoUrl'] }}" alt="Logo">
-                    @else
-                        <span>{{ strtoupper(substr($branding['name'] ?? 'BM', 0, 1)) }}</span>
-                    @endif
-                </div>
                 <div class="idm-brand-copy">
                     <h5>{{ $branding['name'] ?? 'Brand Name' }}</h5>
-                    <p>{{ $branding['tagline'] ?? 'Tagline Space' }}</p>
+                    <p>{{ $branding['outlet'] ?? 'Tagline Space' }}</p>
                 </div>
             </div>
 
@@ -42,8 +35,10 @@
                 <div><span>Email</span><strong>{{ $employeeEmail }}</strong></div>
                 <div><span>Join Date</span><strong>{{ $card['joinedAt'] ?? '-' }}</strong></div>
             </div>
-
-            <div class="idm-barcode"></div>
+            
+            <div class="idm-dates">
+                <div><strong>Valid Thru:</strong> {{ $card['validity'] ?? '-' }}</div>
+            </div>
         </div>
     </section>
 
@@ -52,22 +47,22 @@
             <h6>Terms and Conditions</h6>
             <p>This card is organizational property. Carry it during office hours and present on request. Return immediately upon resignation or transfer.</p>
 
-            <div class="idm-dates">
-                <div><strong>Issued On:</strong> {{ $card['issueDate'] ?? '-' }}</div>
-                <div><strong>Valid Thru:</strong> {{ $card['validity'] ?? '-' }}</div>
-            </div>
-
             <div class="idm-company">
-                <div><strong>Company Name:</strong> {{ $branding['name'] ?? 'Company Name' }}</div>
-                <div><strong>Location:</strong> {{ $companyLocation }}</div>
+                <div><strong>{{ $branding['name'] ?? 'Company Name' }}</strong></div>
+                <div><strong> {{ $companyLocation }} </strong></div>
                 <div><strong>Phone:</strong> {{ $companyPhone }}</div>
                 <div><strong>Email:</strong> {{ $companyEmail }}</div>
-                <div><strong>Website:</strong> {{ $companyWebsite }}</div>
             </div>
 
             <div class="idm-sign">
                 <span>Authorized Signature</span>
-                <small>Human Resources Department</small>
+            </div>
+            <div class="idm-qrcode">
+                @if(!empty($card['qrCodeSvg']))
+                    <img src="{{ $card['qrCodeSvg'] }}" alt="Employee QR Code">
+                @else
+                    <span>{{ $card['studentId'] }}</span>
+                @endif
             </div>
         </div>
 

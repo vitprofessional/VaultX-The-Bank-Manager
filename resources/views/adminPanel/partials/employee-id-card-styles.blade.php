@@ -71,6 +71,7 @@
     align-items: center;
     gap: 7px;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .idm-brand-mark {
@@ -120,11 +121,11 @@
 .idm-avatar-wrap img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
 .idm-name {
     margin: 0;
+    margin-top: 15px;
     font-size: 12.2px;
     text-transform: uppercase;
     font-weight: 800;
@@ -177,11 +178,33 @@
     white-space: nowrap;
 }
 
-.idm-barcode {
-    margin: 11px auto 0;
-    width: 100px;
-    height: 15px;
-    background: repeating-linear-gradient(90deg, #111 0 2px, transparent 2px 3px, #111 3px 4px, transparent 4px 6px);
+.idm-qrcode {
+    width: 60px;
+    height: 60px;
+    margin: 9px auto 0;
+    padding: 6px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #ececec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.idm-qrcode img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.idm-qrcode span {
+    font-size: 9px;
+    font-weight: 700;
+    color: #444;
+    letter-spacing: .6px;
+    text-align: center;
+    word-break: break-word;
 }
 
 .idm-back-content {
@@ -203,7 +226,7 @@
 }
 
 .idm-dates {
-    margin-top: 14px;
+    margin-top: 8px;
     font-size: 10.4px;
     line-height: 1.45;
 }

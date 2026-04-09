@@ -16,7 +16,7 @@ class SuperAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Session::has('superAdmin') || Session::has('manager') || Session::has('generalAdmin') || Session::has('cashier')):
+        if(Session::has('superAdmin')):
             $x = "";
         else:
             return redirect(route('calculasLogin'))->with('error','Please login to continue');

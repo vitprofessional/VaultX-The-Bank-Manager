@@ -35,8 +35,10 @@
                 <div><span>Email</span><strong>{{ $employeeEmail }}</strong></div>
                 <div><span>Join Date</span><strong>{{ $card['joinedAt'] ?? '-' }}</strong></div>
             </div>
-
-            <div class="idm-barcode"></div>
+            
+            <div class="idm-dates">
+                <div><strong>Valid Thru:</strong> {{ $card['validity'] ?? '-' }}</div>
+            </div>
         </div>
     </section>
 
@@ -45,20 +47,22 @@
             <h6>Terms and Conditions</h6>
             <p>This card is organizational property. Carry it during office hours and present on request. Return immediately upon resignation or transfer.</p>
 
-            <div class="idm-dates">
-                <div><strong>Issued On:</strong> {{ $card['issueDate'] ?? '-' }}</div>
-                <div><strong>Valid Thru:</strong> {{ $card['validity'] ?? '-' }}</div>
-            </div>
-
             <div class="idm-company">
-                <div><strong>Company Name:</strong> {{ $branding['name'] ?? 'Company Name' }}</div>
-                <div><strong>Location:</strong> {{ $companyLocation }}</div>
+                <div><strong>{{ $branding['name'] ?? 'Company Name' }}</strong></div>
+                <div><strong> {{ $companyLocation }} </strong></div>
                 <div><strong>Phone:</strong> {{ $companyPhone }}</div>
                 <div><strong>Email:</strong> {{ $companyEmail }}</div>
             </div>
 
             <div class="idm-sign">
                 <span>Authorized Signature</span>
+            </div>
+            <div class="idm-qrcode">
+                @if(!empty($card['qrCodeSvg']))
+                    <img src="{{ $card['qrCodeSvg'] }}" alt="Employee QR Code">
+                @else
+                    <span>{{ $card['studentId'] }}</span>
+                @endif
             </div>
         </div>
 

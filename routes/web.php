@@ -8,6 +8,7 @@ use App\Http\Controllers\CalculasController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ServerConfiguration;
 use App\Http\Controllers\EmployeePayrollController;
+use App\Http\Controllers\StaffEmployeePanelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,38 @@ Route::post('/login/confirm',[
     CalculasViewController::class,
     'loginCalculas'
 ])->name('loginCalculas');
+
+Route::get('/staff/login', [
+    StaffEmployeePanelController::class,
+    'loginView'
+])->name('staffLogin');
+
+Route::post('/staff/login', [
+    StaffEmployeePanelController::class,
+    'login'
+])->name('staffLoginSubmit');
+
+Route::middleware(['staffEmployee'])->group(function () {
+    Route::get('/staff/panel', [
+        StaffEmployeePanelController::class,
+        'dashboard'
+    ])->name('staffDashboard');
+
+    Route::post('/staff/profile/save', [
+        StaffEmployeePanelController::class,
+        'updateProfile'
+    ])->name('staffProfileSave');
+
+    Route::post('/staff/attendance/save', [
+        StaffEmployeePanelController::class,
+        'saveTodayAttendance'
+    ])->name('staffAttendanceSave');
+
+    Route::get('/staff/logout', [
+        StaffEmployeePanelController::class,
+        'logout'
+    ])->name('staffLogout');
+});
 
 
 Route::middleware(['superAdmin','manager','cashier','generalAdmin'])->group(function(){
@@ -246,6 +279,11 @@ Route::middleware(['superAdmin','manager','generalAdmin'])->group(function(){
         'deleteEmployee'
     ])->name('hrEmployeeDelete');
 
+    Route::post('/hr/employees/device-reset/{id}', [
+        EmployeePayrollController::class,
+        'resetEmployeeDeviceBinding'
+    ])->name('hrEmployeeDeviceReset');
+
     Route::get('/hr/employees/id-card/{id}', [
         EmployeePayrollController::class,
         'employeeIdCard'
@@ -275,6 +313,11 @@ Route::middleware(['superAdmin','manager','generalAdmin'])->group(function(){
         EmployeePayrollController::class,
         'saveAttendance'
     ])->name('hrAttendanceSave');
+
+    Route::get('/hr/attendance/edit/{id}', [
+        EmployeePayrollController::class,
+        'editAttendance'
+    ])->name('hrAttendanceEdit');
 
     Route::get('/hr/attendance/delete/{id}', [
         EmployeePayrollController::class,

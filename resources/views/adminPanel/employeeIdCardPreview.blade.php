@@ -12,7 +12,7 @@
             </div>
             @if(isset($employee))
                 @php
-                    $fmt = $format ?? request()->get('format', 'landscape');
+                    $fmt = $format ?? request()->get('format', 'portrait');
                     $qsL = ['format' => 'landscape'];
                     $qsP = ['format' => 'portrait'];
                 @endphp
@@ -23,12 +23,7 @@
                                 <h4 class="mb-0">Employee ID Card</h4>
                                 <div class="d-flex gap-2 align-items-center">
                                     <button type="button" class="btn btn-success btn-sm" onclick="printCards()"><i class="fa-solid fa-print"></i> Print</button>
-                                    <a href="{{ route('hrEmployeeIdCardPdf', ['id' => $employee->id, 'format' => $fmt]) }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-download"></i> Download</a>
-                                    <div class="btn-group">
-                                        <a href="{{ route('hrEmployeeIdCardPreview', ['id' => $employee->id] + $qsL) }}" class="btn btn-outline-secondary btn-sm {{ $fmt === 'landscape' ? 'active' : '' }}">Landscape</a>
-                                        <a href="{{ route('hrEmployeeIdCardPreview', ['id' => $employee->id] + $qsP) }}" class="btn btn-outline-secondary btn-sm {{ $fmt === 'portrait' ? 'active' : '' }}">Portrait</a>
-                                    </div>
-                                    <a href="{{ route('hrEmployeeIndex') }}" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-arrow-left"></i> Back</a>
+                                    <a href="{{ route('hrEmployeeIndex') }}" class="btn btn-danger btn-sm"><i class="fa-solid fa-arrow-left"></i> Back</a>
                                 </div>
                             </div>
                             <div class="card-body" id="printArea">
@@ -79,7 +74,7 @@ function printCards() {
                 html, body { margin: 0; padding: 0; background: #fff; }
                 .print-wrap { width: 100%; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 12mm 0; }
                 .idm-card { box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12); }
-                @page { size: A4 portrait; margin: 12mm; }
+                @page { size: A4 {{ $fmt }}; margin: 12mm; }
             </style>
         </head>
         <body>

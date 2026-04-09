@@ -42,7 +42,7 @@
                 @endif
 
                 @if(isset($data))
-                    @if($data->employee_id == $employee_id)
+                    @if($data->employee_id == $employee_id || Session::has('superAdmin'))
                     <form class="row g-3" method="POST" action="{{ route('acUpdate') }}">
                         @csrf
                         <input type="hidden" name="acId" value="{{ $data->id }}">

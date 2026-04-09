@@ -16,7 +16,7 @@
         }
 
         @page {
-            size: A4 portrait;
+            size: A4 {{ $format ?? 'portrait' }};
             margin: 12mm;
         }
 

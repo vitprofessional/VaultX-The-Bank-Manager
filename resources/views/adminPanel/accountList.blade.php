@@ -56,7 +56,7 @@
                                 <td>{{ $d->acMobile }}</td>
                                 <td>
                                     <a href="{{ route('acView',['id'=>$d->id]) }}" class="btn btn-sm btn-info text-white" title="View Details"><i class="fa-solid fa-eye"></i> View</a>
-                                    @if($d->employee_id == $employee_id)
+                                    @if($d->employee_id == $employee_id || Session::has('superAdmin'))
                                         <a href="{{ route('acEdit',['id'=>$d->id]) }}" class="btn btn-sm btn-success text-white" title="Edit Account"><i class="fa-solid fa-file-pen"></i> Edit</a>
                                         <a href="{{ route('acDelete',['id'=>$d->id]) }}" onclick="return confirm('Are you sure you want to delete this account?')" class="btn btn-sm btn-danger text-white" title="Delete Account"><i class="fa-solid fa-trash"></i> Delete</a>
                                     @endif
