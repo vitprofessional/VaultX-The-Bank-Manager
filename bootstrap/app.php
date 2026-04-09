@@ -8,6 +8,8 @@ use App\Http\Middleware\GeneralAdmin;
 use App\Http\Middleware\Manager;
 use App\Http\Middleware\Cashier;
 use App\Http\Middleware\StaffEmployeeAuth;
+use App\Http\Middleware\EmployeeAuthenticated;
+use App\Http\Middleware\EmployeeAdminAccess;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -22,6 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'manager'       => Manager::class,
             'cashier'       => Cashier::class,
             'staffEmployee' => StaffEmployeeAuth::class,
+            'employeeAuth'  => EmployeeAuthenticated::class,
+            'employeeAdmin' => EmployeeAdminAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

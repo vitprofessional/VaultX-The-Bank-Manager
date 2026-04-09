@@ -74,7 +74,7 @@ Route::middleware(['staffEmployee'])->group(function () {
 });
 
 
-Route::middleware(['superAdmin','manager','cashier','generalAdmin'])->group(function(){
+Route::middleware(['employeeAuth'])->group(function(){
     Route::get('/home',[
         CalculasController::class,
         'index'
@@ -186,7 +186,7 @@ Route::middleware(['superAdmin','manager','cashier','generalAdmin'])->group(func
     ])->name('updatePassword');
 });
 
-Route::middleware(['superAdmin','manager','generalAdmin'])->group(function(){
+Route::middleware(['employeeAdmin'])->group(function(){
     Route::get('/employee/list',[
         CalculasController::class,
         'bankEmployee'
